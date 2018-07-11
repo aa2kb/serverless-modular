@@ -1,0 +1,22 @@
+{
+  "name": "serverless-feature-generator",
+  "version": "1.0.0",
+  "description": "serverless framework plugin for features and functions",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "serverless",
+    "functions",
+    "aws",
+    "feature",
+    "lift"
+  ],
+  "author": "Amin Ahmed Khan",
+  "license": "MIT",
+  "dependencies": {
+    "fs-path": "0.0.24",
+    "touch": "^3.1.0"
+  }
+}
