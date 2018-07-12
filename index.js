@@ -1,6 +1,7 @@
 'use strict';
 let fs = require('fs');
 var fsPath = require('fs-path');
+var format = require("string-template");
 
 class ServerlessPlugin {
   constructor(serverless, options) {
@@ -9,16 +10,20 @@ class ServerlessPlugin {
     this.cwd = process.cwd();
     this.featureSet = [{
       name: 'functions',
-      extension: 'yml'
+      extension: 'yml',
+      template: fs.readFileSync(`${__dirname}/templates/functions.temp.yml.txt`).toString()
     }, {
       name: 'handler',
-      extension: 'js'
+      extension: 'js',
+      template: fs.readFileSync(`${__dirname}/templates/handler.temp.js.txt`).toString()
     }, {
       name: 'controller',
-      extension: 'js'
+      extension: 'js',
+      template: fs.readFileSync(`${__dirname}/templates/controller.temp.js.txt`).toString()
     }, {
       name: 'model',
-      extension: 'js'
+      extension: 'js',
+      template: fs.readFileSync(`${__dirname}/templates/model.temp.js.txt`).toString()
     }]
 
     this.commands = {
@@ -34,6 +39,13 @@ class ServerlessPlugin {
               + '(e.g. "--name \'users\'" or "-m \'users\'")',
             required: true,
             shortcut: 'n',
+          },
+          basepath: {
+            usage:
+              'Specify the basepath you want for your feature '
+              + '(e.g. "--basepath \'users\'" or "-b \'users\'")',
+            required: false,
+            shortcut: 'b',
           },
         },
       },
@@ -65,16 +77,28 @@ class ServerlessPlugin {
   }
 
   createFeatureFile() {
-    for (let i in this.featureSet) {
-      const file = `${this.options.name}-${this.featureSet[i].name}.${this.featureSet[i].extension}`;
-      const path = `${process.cwd()}/src/${this.options.name}/${file}`;
-      if (fs.existsSync(path)) {
-        this.serverless.cli.log(`already exists ${file}`);
-      } else {
-        fsPath.writeFileSync(path, '');
-        this.serverless.cli.log(`generated ${file}`);
+    return new Promise((resolve, reject) => {
+      try {
+        for (let i in this.featureSet) {
+          const file = `${this.options.name}-${this.featureSet[i].name}.${this.featureSet[i].extension}`;
+          const path = `${process.cwd()}/src/${this.options.name}/${file}`;
+          const formatData = {
+            feature: this.options.name,
+            basepath: this.options.basepath || this.options.name
+          };
+
+          if (fs.existsSync(path)) {
+            this.serverless.cli.log(`already exists ${file}`);
+          } else {
+            fsPath.writeFileSync(path, format(this.featureSet[i].template, formatData));
+            this.serverless.cli.log(`generated ${file}`);
+          }
+        }
+        resolve();
+      } catch (err) {
+        reject(err);
       }
-    }
+    });
   }
 
   beforeWelcome() {

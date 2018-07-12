@@ -1,0 +1,9 @@
+basepath: {basepath}
+functions:
+  {feature}Test:
+    handler: src/{feature}/{feature}-handler.test
+    events:
+      - http:
+         method: GET
+         path: ''
+         cors: true

@@ -17,6 +17,7 @@
   "license": "MIT",
   "dependencies": {
     "fs-path": "0.0.24",
+    "string-template": "^1.0.0",
     "touch": "^3.1.0"
   }
 }
