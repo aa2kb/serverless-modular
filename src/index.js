@@ -1,7 +1,8 @@
 'use strict';
-let fs = require('fs');
-var fsPath = require('fs-path');
-var format = require("string-template");
+
+const fs = require('fs');
+const fsPath = require('fs-path');
+const format = require('string-template');
 
 class ServerlessPlugin {
   constructor(serverless, options) {
@@ -24,7 +25,7 @@ class ServerlessPlugin {
       name: 'model',
       extension: 'js',
       template: fs.readFileSync(`${__dirname}/templates/model.temp.js.txt`).toString()
-    }]
+    }];
 
     this.commands = {
       'sf-feature': {
@@ -79,7 +80,7 @@ class ServerlessPlugin {
   createFeatureFile() {
     return new Promise((resolve, reject) => {
       try {
-        for (let i in this.featureSet) {
+        for (const i in this.featureSet) {
           const file = `${this.options.name}-${this.featureSet[i].name}.${this.featureSet[i].extension}`;
           const path = `${process.cwd()}/src/${this.options.name}/${file}`;
           const formatData = {
