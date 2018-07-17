@@ -1,0 +1,7 @@
+module.exports.{func_name} = async (event, context, callback) => {
+  const response = {
+    success: true
+  };
+
+  callback(null, response);
+};
