@@ -1,5 +1,7 @@
 const fsPath = require('fs-path');
 const fs = require('fs');
+const replace = require('replace-in-file');
+const format = require('string-template');
 const utils = require('../../utils');
 
 class sfFunction {
@@ -34,7 +36,16 @@ class sfFunction {
         };
         const FunctionsYml = utils.jsontoYml(functionsJson);
         fsPath.writeFileSync(functionFilePath, FunctionsYml);
-        // resolve(data);
+
+        const formatData = {
+          func_name: `${name}`
+        };
+        await replace({
+          files: handlerFilePath,
+          from: '//sf-EOF',
+          to: `${format(this.constants.templates.addFunction, formatData)}\n\n//sf-EOF`,
+        });
+        resolve();
       } catch (err) {
         reject(err);
       }
