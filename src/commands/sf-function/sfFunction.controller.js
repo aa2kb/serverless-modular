@@ -1,26 +1,39 @@
 const fsPath = require('fs-path');
+const fs = require('fs');
 const utils = require('../../utils');
 
 class sfFunction {
   createFunction() {
     return new Promise(async (resolve, reject) => {
       try {
-        const functionFilePath = `${this.cwd}/src/${this.options.feature}/${this.options.feature}-functions.yml`;
-        const handlerFilePath = `${this.cwd}/src/${this.options.feature}/${this.options.feature}-handler.js`;
+        const feature = this.options.feature;
+        const name = this.options.name;
+        const functionFilePath = `${this.cwd}/src/${feature}/${feature}-functions.yml`;
+        const handlerFilePath = `${this.cwd}/src/${feature}/${feature}-handler.js`;
+        if (!fs.existsSync(functionFilePath)) {
+          throw new Error(`ENOENT: no such file or directory, open '${functionFilePath}'\n\n Feature '${feature}-functions.yml' file does not exists`);
+        }
+        if (!fs.existsSync(handlerFilePath)) {
+          throw new Error(`ENOENT: no such file or directory, open '${handlerFilePath}'\n\n Feature '${feature}-handler.js' file does not exists`);
+        }
         const functionsJson = await utils.ymltoJson(functionFilePath);
-        functionsJson.functions[this.options.name] = {
-          handler: `src/${this.options.feature}/${this.options.feature}-handler.${this.options.name}`,
+        for (const i in functionsJson.functions) {
+          if (i === name) {
+            throw new Error(`Function "${name}" already exists in feature "${feature}"`);
+          }
+        }
+        functionsJson.functions[name] = {
+          handler: `src/${feature}/${feature}-handler.${name}`,
           events: [{
             http: {
               method: 'GET',
-              path: `${this.options.name}`,
+              path: `${name}`,
               cors: true
             }
           }]
         };
         const FunctionsYml = utils.jsontoYml(functionsJson);
         fsPath.writeFileSync(functionFilePath, FunctionsYml);
-        console.log(FunctionsYml);
         // resolve(data);
       } catch (err) {
         reject(err);
