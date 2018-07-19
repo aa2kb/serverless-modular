@@ -17,7 +17,10 @@ const Constants = {
     name: 'model',
     extension: 'js',
     template: fs.readFileSync(`${__dirname}/templates/main/model.temp.js.txt`).toString()
-  }]
+  }],
+  templates: {
+    addFunction: fs.readFileSync(`${__dirname}/templates/components/newfunction.handler.temp.txt`).toString()
+  }
 };
 
 module.exports = Constants;
