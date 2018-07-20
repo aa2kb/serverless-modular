@@ -5,7 +5,7 @@
 This Plugin is under development! DO NOT USE
 ```YAML
 plugins:
-  - serverless-feature-generator
+  - serverless-microservice-manager
 ```
 
 **Features:**
