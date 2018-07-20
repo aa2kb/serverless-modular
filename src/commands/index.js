@@ -1,5 +1,5 @@
-const sfFeatureCommand = require('./sf-feature/sfFeature.command');
-const sfFunctionCommand = require('./sf-function/sfFunction.command');
+const sfFeatureCommand = require('./feature/feature.command');
+const sfFunctionCommand = require('./function/function.command');
 
 module.exports = {
   sfFeatureCommand,
