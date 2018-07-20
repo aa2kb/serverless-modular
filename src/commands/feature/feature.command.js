@@ -1,4 +1,4 @@
-const sfFeatureCommands = {
+const featureCommands = {
   usage: 'Helps you build out your serverless feaure',
   lifecycleEvents: [
     'createFeatureFile'
@@ -21,4 +21,4 @@ const sfFeatureCommands = {
   }
 };
 
-module.exports = sfFeatureCommands;
+module.exports = featureCommands;

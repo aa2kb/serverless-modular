@@ -1,4 +1,4 @@
-const sfFunctionCommands = {
+const functionCommands = {
   usage: 'Helps you build out your serverless feaure',
   lifecycleEvents: [
     'createFunction'
@@ -21,4 +21,4 @@ const sfFunctionCommands = {
   }
 };
 
-module.exports = sfFunctionCommands;
+module.exports = functionCommands;

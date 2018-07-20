@@ -4,7 +4,7 @@ const replace = require('replace-in-file');
 const format = require('string-template');
 const utils = require('../../utils');
 
-class sfFunction {
+class functionClass {
   createFunction() {
     return new Promise(async (resolve, reject) => {
       try {
@@ -53,4 +53,4 @@ class sfFunction {
   }
 }
 
-module.exports = sfFunction;
+module.exports = functionClass;

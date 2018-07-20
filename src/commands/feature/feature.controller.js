@@ -2,7 +2,7 @@ const fsPath = require('fs-path');
 const format = require('string-template');
 const fs = require('fs');
 
-class sfFeature {
+class featureClass {
   createFeatureFile() {
     return new Promise((resolve, reject) => {
       try {
@@ -29,4 +29,4 @@ class sfFeature {
   }
 }
 
-module.exports = sfFeature;
+module.exports = featureClass;
