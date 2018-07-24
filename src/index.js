@@ -2,11 +2,7 @@
 
 const constants = require('./constants');
 const commands = require('./commands');
-const SfFeatureController = require('./commands/feature/feature.controller');
-const SfFunctionController = require('./commands/function/function.controller');
 
-const sfFeatureController = new SfFeatureController();
-const sfFunctionController = new SfFunctionController();
 class ServerlessPlugin {
   constructor(serverless, options) {
     this.serverless = serverless;
@@ -17,14 +13,14 @@ class ServerlessPlugin {
     this.commands = {
       smm: {
         commands: {
-          feature: commands.sfFeatureCommand,
-          function: commands.sfFunctionCommand,
+          feature: commands.smmFeature.command,
+          function: commands.smmFunction.command,
         }
       }
     };
     this.hooks = {
-      'smm:feature:createFeatureFile': sfFeatureController.createFeatureFile.bind(this),
-      'smm:function:createFunction': sfFunctionController.createFunction.bind(this)
+      'smm:feature:createFeatureFile': commands.smmFeature.controller.bind(this),
+      'smm:function:createFunction': commands.smmFunction.controller.bind(this)
     };
   }
 }
