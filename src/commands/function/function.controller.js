@@ -1,6 +1,5 @@
 const fsPath = require('fs-path');
 const fs = require('fs');
-const replace = require('replace-in-file');
 const format = require('string-template');
 const utils = require('../../utils');
 
@@ -36,16 +35,13 @@ class functionClass {
         };
         const FunctionsYml = utils.jsontoYml(functionsJson);
         fsPath.writeFileSync(functionFilePath, FunctionsYml);
-
         const formatData = {
           func_name: `${name}`
         };
-        await replace({
-          files: handlerFilePath,
-          from: '//sf-EOF',
-          to: `${format(this.constants.templates.addFunction, formatData)}\n\n//sf-EOF`,
-        });
+        const newFunction = `\n${format(this.constants.templates.addFunction, formatData)}\n`;
+        fs.appendFileSync(handlerFilePath, newFunction);
         resolve();
+        this.serverless.cli.log(`${name} function added in feature ${feature}`);
       } catch (err) {
         reject(err);
       }

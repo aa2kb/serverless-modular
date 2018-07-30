@@ -6,4 +6,3 @@ module.exports.test = async (event, context, callback) => {
   callback(null, response);
 };
 
-//sf-EOF
