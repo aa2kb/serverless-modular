@@ -1,19 +1,19 @@
-const smmFeatureCommand = require('./feature/feature.command');
+const smmFeatureAddCommand = require('./feature-add/feature-add.command');
 const smmFunctionCommand = require('./function/function.command');
 const smmbuildCommand = require('./build/build.command');
 
-const SmmFeatureController = require('./feature/feature.controller');
+const SmmFeatureAddController = require('./feature-add/feature-add.controller');
 const SmmFunctionController = require('./function/function.controller');
 const SmmbuildController = require('./build/build.controller');
 
-const smmFeatureController = new SmmFeatureController();
+const smmFeatureAddController = new SmmFeatureAddController();
 const smmFunctionController = new SmmFunctionController();
 const smmbuildController = new SmmbuildController();
 
 module.exports = {
-  smmFeature: {
-    command: smmFeatureCommand,
-    controller: smmFeatureController.createFeatureFile
+  smmfeatureAdd: {
+    command: smmFeatureAddCommand,
+    controller: smmFeatureAddController.createFeatureFile
   },
   smmFunction: {
     command: smmFunctionCommand,
