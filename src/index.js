@@ -14,7 +14,7 @@ class ServerlessPlugin {
       smm: {
         commands: {
           'feature-add': commands.smmfeatureAdd.command,
-          'feature-remove': commands.smmfeatureAdd.command,
+          'feature-remove': commands.smmfeatureRemove.command,
           function: commands.smmFunction.command,
           build: commands.smmBuild.command
         }
@@ -22,6 +22,7 @@ class ServerlessPlugin {
     };
     this.hooks = {
       'smm:feature-add:createFeatureFile': commands.smmfeatureAdd.controller.bind(this),
+      'smm:feature-remove:removeFeature': commands.smmfeatureRemove.controller.bind(this),
       'smm:function:createFunction': commands.smmFunction.controller.bind(this),
       'smm:build:createFunctionsYml': commands.smmBuild.controller.bind(this)
     };
