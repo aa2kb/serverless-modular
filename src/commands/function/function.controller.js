@@ -24,7 +24,7 @@ class functionClass {
           }
         }
         functionsJson.functions[name] = {
-          handler: `src/${feature}/${feature}-handler.${name}`,
+          handler: `${feature}-handler.${name}`,
           events: [{
             http: {
               method: 'GET',
