@@ -37,6 +37,7 @@ class buildClass {
     }
     // console.log(mainFunctions);
     fsPath.writeFileSync(mainFunctionsPath, utils.jsontoYml(mainFunctions));
+    this.serverless.cli.log(`${feature ? `'${feature}' feature ` : ''}Build Successful`);
   }
 }
 

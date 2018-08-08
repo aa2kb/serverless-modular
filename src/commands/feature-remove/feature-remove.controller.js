@@ -9,6 +9,7 @@ class featureRemoveClass {
           if (err) {
             throw (err);
           }
+          this.serverless.cli.log(`${this.options.name} feature removed`);
           resolve();
         });
       } catch (err) {
