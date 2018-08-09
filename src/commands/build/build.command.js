@@ -11,6 +11,13 @@ const buildCommands = {
         + '(e.g. "--feature \'users\'" or "-f \'users\'")',
       required: false,
       shortcut: 'f',
+    },
+    scope: {
+      usage:
+        'Specify the scope of the build, use this with "--feature" tag '
+        + '(e.g. "--scope \'users\'" or "-s \'users\'")',
+      required: false,
+      shortcut: 's',
     }
   }
 };

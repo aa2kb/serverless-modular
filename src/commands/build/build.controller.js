@@ -4,8 +4,11 @@ const utils = require('../../utils');
 class buildClass {
   async createFunctionsYml() {
     const feature = this.options.feature;
+    const scope = this.options.scope;
     const srcPath = `${this.cwd}/src`;
     const mainFunctionsPath = `${this.cwd}/functions.yml`;
+    const feautreServerlessYmlPath = `${this.cwd}/src/${feature}/serverless.yml`;
+    const mainServerlessYmlPath = `${this.cwd}/serverless.yml`;
     let featureFunctions = [];
     if (feature) {
       featureFunctions = [{
@@ -28,16 +31,25 @@ class buildClass {
       const functionYml = await utils.ymltoJson(f.path);
       for (const i in functionYml.functions) {
         const currentFunction = functionYml.functions[i];
+        currentFunction.handler = scope === 'local' ? currentFunction.handler : `src/${f.name}/${currentFunction.handler}`;
         for (const j in currentFunction.events) {
           const currentpath = currentFunction.events[j].http.path;
-          currentFunction.events[j].http.path = `${functionYml.basepath}/${currentpath}`;
+          currentFunction.events[j].http.path = scope === 'local' ? `${functionYml.basepath}/${currentpath}` : `${functionYml.basepath}/${currentpath}`;
         }
-        mainFunctions[`${f.name}-${i}`] = currentFunction;
+        const functionName = scope === 'local' ? `${i}` : `${f.name}-${i}`;
+        mainFunctions[functionName] = currentFunction;
       }
     }
     // console.log(mainFunctions);
-    fsPath.writeFileSync(mainFunctionsPath, utils.jsontoYml(mainFunctions));
-    this.serverless.cli.log(`${feature ? `'${feature}' feature ` : ''}Build Successful`);
+    if (scope === 'local' && feature) {
+      const serverlessConfig = await utils.ymltoJson(mainServerlessYmlPath);
+      serverlessConfig.functions = mainFunctions;
+      console.log(feautreServerlessYmlPath);
+      fsPath.writeFileSync(feautreServerlessYmlPath, utils.jsontoYml(serverlessConfig));
+    } else {
+      fsPath.writeFileSync(mainFunctionsPath, utils.jsontoYml(mainFunctions));
+      this.serverless.cli.log(`${feature ? `'${feature}' feature ` : ''}Build Successful`);
+    }
   }
 }
 
