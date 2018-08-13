@@ -45,6 +45,7 @@ class buildClass {
       serverlessConfig.functions = mainFunctions;
       serverlessConfig.service = `${serverlessConfig.service}-${feature}`;
       fsPath.writeFileSync(feautreServerlessYmlPath, utils.jsontoYml(serverlessConfig));
+      this.serverless.cli.log(`local '${feature}' feature build successful`);
     } else {
       fsPath.writeFileSync(mainFunctionsPath, utils.jsontoYml(mainFunctions));
       this.serverless.cli.log(`${feature ? `'${feature}' feature ` : ''}build successful`);
