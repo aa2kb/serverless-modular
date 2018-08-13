@@ -40,7 +40,6 @@ class buildClass {
         mainFunctions[functionName] = currentFunction;
       }
     }
-    // console.log(mainFunctions);
     if (scope === 'local' && feature) {
       const serverlessConfig = await utils.ymltoJson(mainServerlessYmlPath);
       serverlessConfig.functions = mainFunctions;
