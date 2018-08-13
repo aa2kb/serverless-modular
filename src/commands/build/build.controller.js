@@ -1,4 +1,5 @@
 const fsPath = require('fs-path');
+const replace = require('replace-in-file');
 const utils = require('../../utils');
 
 class buildClass {
@@ -44,7 +45,24 @@ class buildClass {
       const serverlessConfig = await utils.ymltoJson(mainServerlessYmlPath);
       serverlessConfig.functions = mainFunctions;
       serverlessConfig.service = `${serverlessConfig.service}-${feature}`;
+      if (serverlessConfig.package) {
+        if (serverlessConfig.package.include) {
+          serverlessConfig.package.include.push('../../node_modules');
+        } else {
+          serverlessConfig.package.include = ['../../node_modules'];
+        }
+      } else {
+        serverlessConfig.package = {
+          include: ['../../node_modules/**']
+        };
+      }
       fsPath.writeFileSync(feautreServerlessYmlPath, utils.jsontoYml(serverlessConfig));
+      const options = {
+        files: feautreServerlessYmlPath,
+        from: ['${file('],
+        to: '${file(../../',
+      };
+      await replace(options);
       this.serverless.cli.log(`local '${feature}' feature build successful`);
     } else {
       fsPath.writeFileSync(mainFunctionsPath, utils.jsontoYml(mainFunctions));
