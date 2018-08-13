@@ -43,11 +43,11 @@ class buildClass {
     if (scope === 'local' && feature) {
       const serverlessConfig = await utils.ymltoJson(mainServerlessYmlPath);
       serverlessConfig.functions = mainFunctions;
-      console.log(feautreServerlessYmlPath);
+      serverlessConfig.service = `${serverlessConfig.service}-${feature}`;
       fsPath.writeFileSync(feautreServerlessYmlPath, utils.jsontoYml(serverlessConfig));
     } else {
       fsPath.writeFileSync(mainFunctionsPath, utils.jsontoYml(mainFunctions));
-      this.serverless.cli.log(`${feature ? `'${feature}' feature ` : ''}Build Successful`);
+      this.serverless.cli.log(`${feature ? `'${feature}' feature ` : ''}build successful`);
     }
   }
 }
