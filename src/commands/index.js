@@ -16,11 +16,7 @@ const smmbuildController = new SmmbuildController();
 module.exports = {
   smmfeatureAdd: {
     command: smmFeatureAddCommand,
-    controller: smmFeatureAddController.createFeatureFile
-  },
-  smmfeatureRemove: {
-    command: smmFeatureRemoveCommand,
-    controller: smmFeatureRemoveController.removeFeature
+    controller: smmFeatureAddController.featureHandler
   },
   smmFunction: {
     command: smmFunctionCommand,
