@@ -48,7 +48,7 @@ class featureClass {
     };
 
     console.log(this.options.remove);
-    return this.options.remove.toString() === 'true'
+    return this.options.remove && this.options.remove.toString() === 'true'
       ? removeFeature.call(this)
       : createFeatureFiles.call(this);
   }

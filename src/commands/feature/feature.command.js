@@ -1,7 +1,7 @@
 const featureCommands = {
   usage: 'Helps you build out your serverless feaure',
   lifecycleEvents: [
-    'createFeatureFile'
+    'featureHandler'
   ],
   options: {
     name: {
