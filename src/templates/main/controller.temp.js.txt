@@ -8,7 +8,7 @@ class {feature}Controller {
         'Access-Control-Allow-Origin': '*'
       },
       body: JSON.stringify({
-        message: 'Running {feature} feture test handeler. GO SF!',
+        message: 'Running {feature} feture test handeler. Yay SMM!',
         input: event,
       }),
     });
