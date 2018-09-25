@@ -19,8 +19,8 @@ class functionClass {
         }
         const functionsJson = await utils.ymltoJson(functionFilePath);
         for (const i in functionsJson.functions) {
-          if (i === name) {
-            throw new Error(`Function "${name}" already exists in feature "${feature}"`);
+          if (i.toLowerCase() === name.toLowerCase()) {
+            throw new Error(`Function "${i.toLowerCase()}" already exists in feature "${feature}"`);
           }
         }
         functionsJson.functions[name] = {
