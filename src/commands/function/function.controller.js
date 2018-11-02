@@ -9,6 +9,8 @@ class functionClass {
       try {
         const feature = this.options.feature;
         const name = this.options.name;
+        const HTTPMethod = this.options.method;
+        const HTTPPath = this.options.path;
         const functionFilePath = `${this.cwd}/src/${feature}/${feature}-functions.yml`;
         const handlerFilePath = `${this.cwd}/src/${feature}/${feature}-handler.js`;
         if (!fs.existsSync(functionFilePath)) {
@@ -27,8 +29,8 @@ class functionClass {
           handler: `${feature}-handler.${name}`,
           events: [{
             http: {
-              method: 'GET',
-              path: `${name}`,
+              method: `${HTTPMethod.toUpperCase() || 'GET'}`,
+              path: `${HTTPPath || name}`,
               cors: true
             }
           }]
