@@ -42,11 +42,7 @@ function adjustCustom(serverlessConfig, basePath) {
           basePath
         }
       };
-    } else {
-      throw (new Error('customDomain is missing in root serverless.yml\nKindly Visit to install the plugin https://github.com/amplify-education/serverless-domain-manager'));
     }
-  } else {
-    throw (new Error('customDomain is missing in root serverless.yml\nKindly Visit to install the plugin https://github.com/amplify-education/serverless-domain-manager'));
   }
   return serverlessConfig.custom;
 }
