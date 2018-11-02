@@ -1,6 +1,7 @@
 const fsPath = require('fs-path');
 const replace = require('replace-in-file');
 const utils = require('../../utils');
+const buildHelper = require('./build.helper');
 
 class buildClass {
   async createFunctionsYml() {
@@ -48,17 +49,8 @@ class buildClass {
       const serverlessConfig = await utils.ymltoJson(mainServerlessYmlPath);
       serverlessConfig.functions = mainFunctions;
       serverlessConfig.service = `${serverlessConfig.service}-${feature}`;
-      if (serverlessConfig.package) {
-        if (serverlessConfig.package.include) {
-          serverlessConfig.package.include.push('../../node_modules');
-        } else {
-          serverlessConfig.package.include = ['../../node_modules'];
-        }
-      } else {
-        serverlessConfig.package = {
-          include: ['../../node_modules/**']
-        };
-      }
+      serverlessConfig.package = buildHelper.addNodeModules(serverlessConfig);
+      serverlessConfig.plugins = buildHelper.adjustPlugin(serverlessConfig);
       fsPath.writeFileSync(feautreServerlessYmlPath, utils.jsontoYml(serverlessConfig));
       const options = {
         files: feautreServerlessYmlPath,
@@ -66,7 +58,7 @@ class buildClass {
         to: '${file(../../',
       };
       await replace(options);
-      this.serverless.cli.log(`local '${feature}' feature build successful`);
+      this.serverless.cli.log(`Local '${feature}' feature build successful`);
       this.serverless.cli.log(feautreServerlessYmlPath);
     } else if (scope === 'local' && !feature) {
       for (const f of featureFunctions) {
@@ -82,17 +74,8 @@ class buildClass {
           const serverlessConfig = await utils.ymltoJson(mainServerlessYmlPath);
           serverlessConfig.functions = localFeatureFunctions;
           serverlessConfig.service = `${serverlessConfig.service}-${f.name}`;
-          if (serverlessConfig.package) {
-            if (serverlessConfig.package.include) {
-              serverlessConfig.package.include.push('../../node_modules');
-            } else {
-              serverlessConfig.package.include = ['../../node_modules'];
-            }
-          } else {
-            serverlessConfig.package = {
-              include: ['../../node_modules/**']
-            };
-          }
+          serverlessConfig.package = buildHelper.addNodeModules(serverlessConfig);
+          serverlessConfig.plugins = buildHelper.adjustPlugin(serverlessConfig);
           localFeautreServerlessYmlPath = `${this.cwd}/src/${f.name}/serverless.yml`;
           fsPath.writeFileSync(localFeautreServerlessYmlPath, utils.jsontoYml(serverlessConfig));
           const options = {
@@ -103,12 +86,12 @@ class buildClass {
           await replace(options);
         }
         console.log('\n');
-        this.serverless.cli.log(`local '${f.name}' feature build successful`);
+        this.serverless.cli.log(`Local '${f.name}' feature build successful`);
         this.serverless.cli.log(localFeautreServerlessYmlPath);
       }
     } else {
       fsPath.writeFileSync(mainFunctionsPath, utils.jsontoYml(mainFunctions));
-      this.serverless.cli.log(`${feature ? `global '${feature}' feature ` : 'global '}build successful`);
+      this.serverless.cli.log(`${feature ? `Global '${feature}' Feature` : 'Global'} build successful`);
       this.serverless.cli.log(mainFunctionsPath);
     }
   }
