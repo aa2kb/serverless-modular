@@ -32,14 +32,16 @@ class buildClass {
     }
 
     const mainFunctions = {};
+    let basePath = '';
     for (const f of featureFunctions) {
       const functionYml = await utils.ymltoJson(f.path);
+      basePath = functionYml.basepath;
       for (const i in functionYml.functions) {
         const currentFunction = functionYml.functions[i];
         currentFunction.handler = scope === 'local' ? currentFunction.handler : `src/${f.name}/${currentFunction.handler}`;
         for (const j in currentFunction.events) {
-          const currentpath = currentFunction.events[j].http.path;
-          currentFunction.events[j].http.path = scope === 'local' ? `${currentpath}` : `${functionYml.basepath}/${currentpath}`;
+          const currentPath = currentFunction.events[j].http.path;
+          currentFunction.events[j].http.path = scope === 'local' ? `${currentPath}` : `${functionYml.basepath}/${currentPath}`;
         }
         const functionName = scope === 'local' ? `${i}` : `${f.name}-${i}`;
         mainFunctions[functionName] = currentFunction;
@@ -49,8 +51,9 @@ class buildClass {
       const serverlessConfig = await utils.ymltoJson(mainServerlessYmlPath);
       serverlessConfig.functions = mainFunctions;
       serverlessConfig.service = `${serverlessConfig.service}-${feature}`;
-      serverlessConfig.package = buildHelper.addNodeModules(serverlessConfig);
+      serverlessConfig.package = buildHelper.adjustPackage(serverlessConfig);
       serverlessConfig.plugins = buildHelper.adjustPlugin(serverlessConfig);
+      serverlessConfig.custom = buildHelper.adjustCustom(serverlessConfig, basePath);
       fsPath.writeFileSync(feautreServerlessYmlPath, utils.jsontoYml(serverlessConfig));
       const options = {
         files: feautreServerlessYmlPath,
@@ -65,6 +68,7 @@ class buildClass {
         let localFeautreServerlessYmlPath;
         const localFeatureFunctions = {};
         const functionYml = await utils.ymltoJson(f.path);
+        basePath = functionYml.basepath;
         for (const i in functionYml.functions) {
           const currentFunction = functionYml.functions[i];
           currentFunction.handler = scope === 'local' ? currentFunction.handler : `src/${f.name}/${currentFunction.handler}`;
@@ -74,8 +78,9 @@ class buildClass {
           const serverlessConfig = await utils.ymltoJson(mainServerlessYmlPath);
           serverlessConfig.functions = localFeatureFunctions;
           serverlessConfig.service = `${serverlessConfig.service}-${f.name}`;
-          serverlessConfig.package = buildHelper.addNodeModules(serverlessConfig);
+          serverlessConfig.package = buildHelper.adjustPackage(serverlessConfig);
           serverlessConfig.plugins = buildHelper.adjustPlugin(serverlessConfig);
+          serverlessConfig.custom = buildHelper.adjustCustom(serverlessConfig, basePath);
           localFeautreServerlessYmlPath = `${this.cwd}/src/${f.name}/serverless.yml`;
           fsPath.writeFileSync(localFeautreServerlessYmlPath, utils.jsontoYml(serverlessConfig));
           const options = {
