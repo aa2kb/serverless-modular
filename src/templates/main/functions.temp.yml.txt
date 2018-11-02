@@ -1,4 +1,4 @@
-basepath: {basepath}
+basePath: {basePath}
 functions:
   {feature}Test:
     handler: {feature}-handler.test

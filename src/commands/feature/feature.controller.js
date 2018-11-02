@@ -13,7 +13,7 @@ class featureClass {
             const path = `${this.cwd}/src/${this.options.name}/${file}`.toLowerCase();
             const formatData = {
               feature: this.options.name,
-              basepath: this.options.basepath || this.options.name
+              basePath: this.options.basePath || this.options.name
             };
 
             if (fs.existsSync(path)) {
