@@ -51,7 +51,7 @@ function adjustCustom(serverlessConfig, basePath) {
   return serverlessConfig.custom;
 }
 
-async function buildFunctions(featureFunctions, scope) {
+async function buildGlobalFunctions(featureFunctions) {
   const functions = {};
   let basePath;
   for (const f of featureFunctions) {
@@ -59,12 +59,12 @@ async function buildFunctions(featureFunctions, scope) {
     basePath = functionYml.basePath;
     for (const i in functionYml.functions) {
       const currentFunction = functionYml.functions[i];
-      currentFunction.handler = scope === 'local' ? currentFunction.handler : `src/${f.name}/${currentFunction.handler}`;
+      currentFunction.handler = `src/${f.name}/${currentFunction.handler}`;
       for (const j in currentFunction.events) {
         const currentPath = currentFunction.events[j].http.path;
-        currentFunction.events[j].http.path = scope === 'local' ? `${currentPath}` : `${functionYml.basepath}/${currentPath}`;
+        currentFunction.events[j].http.path = `${functionYml.basePath}/${currentPath}`;
       }
-      const functionName = scope === 'local' ? `${i}` : `${f.name}-${i}`;
+      const functionName = `${f.name}-${i}`;
       functions[functionName] = currentFunction;
     }
   }
@@ -74,57 +74,43 @@ async function buildFunctions(featureFunctions, scope) {
   };
 }
 
-async function globalBuild(featureFunctions, feature, cwd) {
-  const mainFunctionsPath = `${cwd}/functions.yml`;
-  const mainFunctions = await buildFunctions(featureFunctions, 'global');
-  fsPath.writeFileSync(mainFunctionsPath, utils.jsontoYml(mainFunctions.functions));
-}
-
-async function localBuild(featureFunctions, feature, cwd) {
-  const mainFunctions = await buildFunctions(featureFunctions, 'local');
-  const mainServerlessYmlPath = `${cwd}/serverless.yml`;
-  const serverlessConfig = await utils.ymltoJson(mainServerlessYmlPath);
-  if (feature) {
-    const basePath = mainFunctions.basePath;
-    const featureServerlessYmlPath = `${cwd}/src/${feature}/serverless.yml`;
-    serverlessConfig.functions = mainFunctions.functions;
-    serverlessConfig.service = `${serverlessConfig.service}-${feature}`;
+async function buildLocalSLSConfig(serverlessConfig, basePath, cwd, feature, functionYml) {
+  const localFeatureFunctions = {};
+  let localFeatureServerlessYmlPath;
+  for (const i in functionYml.functions) {
+    const currentFunction = functionYml.functions[i];
+    currentFunction.handler = currentFunction.handler;
+    const functionName = `${i}`;
+    localFeatureFunctions[functionName] = currentFunction;
+    serverlessConfig.functions = localFeatureFunctions;
     serverlessConfig.package = adjustPackage(serverlessConfig);
     serverlessConfig.plugins = adjustPlugin(serverlessConfig);
     serverlessConfig.custom = adjustCustom(serverlessConfig, basePath);
-    fsPath.writeFileSync(featureServerlessYmlPath, utils.jsontoYml(serverlessConfig));
+    localFeatureServerlessYmlPath = `${cwd}/src/${feature.name}/serverless.yml`;
+    fsPath.writeFileSync(localFeatureServerlessYmlPath, utils.jsontoYml(serverlessConfig));
     const options = {
-      files: featureServerlessYmlPath,
+      files: localFeatureServerlessYmlPath,
       from: [/\$\{file\(/g],
       to: '${file(../../',
     };
     await replace(options);
-  } else {
-    for (const f of featureFunctions) {
-      let localFeatureServerlessYmlPath;
-      const localFeatureFunctions = {};
-      const functionYml = await utils.ymltoJson(f.path);
-      const basePath = functionYml.basePath;
-      for (const i in functionYml.functions) {
-        const currentFunction = functionYml.functions[i];
-        currentFunction.handler = currentFunction.handler;
-        const functionName = `${i}`;
-        localFeatureFunctions[functionName] = currentFunction;
-        serverlessConfig.functions = localFeatureFunctions;
-        serverlessConfig.service = `${serverlessConfig.service}-${f.name}`;
-        serverlessConfig.package = adjustPackage(serverlessConfig);
-        serverlessConfig.plugins = adjustPlugin(serverlessConfig);
-        serverlessConfig.custom = adjustCustom(serverlessConfig, basePath);
-        localFeatureServerlessYmlPath = `${cwd}/src/${f.name}/serverless.yml`;
-        fsPath.writeFileSync(localFeatureServerlessYmlPath, utils.jsontoYml(serverlessConfig));
-        const options = {
-          files: localFeatureServerlessYmlPath,
-          from: [/\$\{file\(/g],
-          to: '${file(../../',
-        };
-        await replace(options);
-      }
-    }
+  }
+}
+
+async function globalBuild(featureFunctions, feature, cwd) {
+  const mainFunctionsPath = `${cwd}/functions.yml`;
+  const mainFunctions = await buildGlobalFunctions(featureFunctions);
+  fsPath.writeFileSync(mainFunctionsPath, utils.jsontoYml(mainFunctions.functions));
+}
+
+async function localBuild(featureFunctions, feature, cwd) {
+  const mainServerlessYmlPath = `${cwd}/serverless.yml`;
+  const serverlessConfig = await utils.ymltoJson(mainServerlessYmlPath);
+  for (const f of featureFunctions) {
+    const functionYml = await utils.ymltoJson(f.path);
+    const basePath = functionYml.basePath;
+    serverlessConfig.service = `${serverlessConfig.service}-${f.name}`;
+    await buildLocalSLSConfig(serverlessConfig, basePath, cwd, f, functionYml);
   }
 }
 
