@@ -1,14 +1,14 @@
 const smmFeatureCommand = require('./feature/feature.command');
 const smmFunctionCommand = require('./function/function.command');
-const smmbuildCommand = require('./build/build.command');
+const smmBuildCommand = require('./build/build.command');
 
 const SmmFeatureController = require('./feature/feature.controller');
 const SmmFunctionController = require('./function/function.controller');
-const SmmbuildController = require('./build/build.controller');
+const SmmBuildController = require('./build/build.controller');
 
 const smmFeatureController = new SmmFeatureController();
 const smmFunctionController = new SmmFunctionController();
-const smmbuildController = new SmmbuildController();
+const smmBuildController = new SmmBuildController();
 
 module.exports = {
   smmFeature: {
@@ -20,7 +20,7 @@ module.exports = {
     controller: smmFunctionController.createFunction
   },
   smmBuild: {
-    command: smmbuildCommand,
-    controller: smmbuildController.createFunctionsYml
+    command: smmBuildCommand,
+    controller: smmBuildController.createFunctionsYml
   }
 };
