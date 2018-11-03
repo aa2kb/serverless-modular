@@ -1,4 +1,5 @@
-const {feature}Ctrl = require('./{feature}-controller.js');
+const {featureInitCap} = require('./{feature}-controller.js');
+const {feature}Ctrl = new {featureInitCap}();
 
 export async function test(event, context, callback) {
   const response = await {feature}Ctrl.sendTestResponse();

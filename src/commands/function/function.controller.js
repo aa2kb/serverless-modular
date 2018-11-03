@@ -7,10 +7,15 @@ class functionClass {
   createFunction() {
     return new Promise(async (resolve, reject) => {
       try {
+        const mainServerlessYmlPath = `${this.cwd}/serverless.yml`;
+        const serverlessConfig = await utils.ymltoJson(mainServerlessYmlPath);
+        const esVersion = utils.getEsVersion(serverlessConfig);
         const feature = this.options.feature;
         const name = this.options.name.toLowerCase();
-        const HTTPMethod = this.options.method.toUpperCase();
-        const HTTPPath = this.options.path.toLowerCase();
+        let HTTPMethod = this.options.method || 'get';
+        HTTPMethod = HTTPMethod.toUpperCase();
+        let HTTPPath = this.options.path || name;
+        HTTPPath = HTTPPath.toLowerCase();
         const functionFilePath = `${this.cwd}/src/${feature}/${feature}-functions.yml`;
         const handlerFilePath = `${this.cwd}/src/${feature}/${feature}-handler.js`;
         if (!fs.existsSync(functionFilePath)) {
@@ -45,7 +50,7 @@ class functionClass {
         const formatData = {
           func_name: `${name}`
         };
-        const newFunction = `\n${format(this.constants.templates.addFunction, formatData)}\n`;
+        const newFunction = `\n${format(this.constants.templates.addFunction[esVersion], formatData)}\n`;
         fs.appendFileSync(handlerFilePath, newFunction);
         resolve();
         this.serverless.cli.log(`"${name}" function added in feature "${feature}"`);

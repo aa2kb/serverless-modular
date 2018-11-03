@@ -1,18 +1,21 @@
 var {feature}Model = require('./{feature}-model.js');
 
-class {feature}Controller {
-  sendTestResponse = () => new Promise((resolve, reject) => {
-    resolve({
-      statusCode: 200,
-      headers: {
-        'Access-Control-Allow-Origin': '*'
-      },
-      body: JSON.stringify({
-        message: 'Running {feature} feature test handler. Yay SMM!',
-        input: event,
-      }),
-    });
-  });
+function {feature}Controller(){
+  // Constructor
 }
 
-module.exports = ${feature}Controller;
+{feature}Controller.prototype.sendTestResponse = () => new Promise((resolve, reject) => {
+  resolve({
+    statusCode: 200,
+    headers: {
+      'Access-Control-Allow-Origin': '*'
+    },
+    body: JSON.stringify({
+      message: 'Running {feature} feature test handler. Yay SMM!',
+      input: event,
+    }),
+  });
+});
+
+
+module.exports = {feature}Controller;

@@ -2,7 +2,7 @@ const fsPath = require('fs-path');
 const format = require('string-template');
 const fs = require('fs');
 const rimraf = require('rimraf');
-const featureHelper = require('./feature.helper');
+const _ = require('lodash');
 const utils = require('../../utils');
 
 class featureClass {
@@ -12,7 +12,7 @@ class featureClass {
         try {
           const mainServerlessYmlPath = `${this.cwd}/serverless.yml`;
           const serverlessConfig = await utils.ymltoJson(mainServerlessYmlPath);
-          const esVersion = featureHelper.getEsVersion(serverlessConfig);
+          const esVersion = utils.getEsVersion(serverlessConfig);
           for (const i in this.featureSet) {
             const file = `${this.options.name}-${this.featureSet[i].name}.${this.featureSet[i].extension}`.toLowerCase();
             const path = `${this.cwd}/src/${this.options.name}/${file}`.toLowerCase();
@@ -24,6 +24,7 @@ class featureClass {
             }
             const formatData = {
               feature: this.options.name,
+              featureInitCap: _.startCase(this.options.name),
               basePath: this.options.basePath || this.options.name
             };
 

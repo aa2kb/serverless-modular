@@ -1,4 +1,4 @@
-exports async function {func_name}(event, context, callback) => {
+export async function {func_name}(event, context, callback) {
   const response = {
     success: true
   };
