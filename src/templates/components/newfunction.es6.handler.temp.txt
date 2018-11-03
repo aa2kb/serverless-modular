@@ -1,0 +1,7 @@
+exports async function {func_name}(event, context, callback) => {
+  const response = {
+    success: true
+  };
+
+  callback(null, response);
+};

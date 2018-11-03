@@ -1,0 +1,16 @@
+const {feature}Model = require('./{feature}-model.js');
+
+export default class {feature}Controller {
+  sendTestResponse = () => new Promise((resolve, reject) => {
+    resolve({
+      statusCode: 200,
+      headers: {
+        'Access-Control-Allow-Origin': '*'
+      },
+      body: JSON.stringify({
+        message: 'Running {feature} feture test handeler. Yay SMM!',
+        input: event,
+      }),
+    });
+  });
+}

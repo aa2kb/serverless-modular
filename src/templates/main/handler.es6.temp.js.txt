@@ -1,0 +1,8 @@
+const {feature}Ctrl = require('./{feature}-controller.js');
+
+export async function test(event, context, callback) => {
+  const response = await {feature}Ctrl.sendTestResponse();
+
+  callback(null, response);
+};
+
