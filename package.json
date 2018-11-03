@@ -1,7 +1,16 @@
 {
-  "name": "serverless-feature-manager",
-  "version": "1.0.0",
-  "description": "serverless framework plugin for feature managment",
+  "name": "serverless-microservice-manager",
+  "version": "0.0.1",
+  "description": "serverless framework plugin for feature management",
+  "homepage": "https://github.com/aa2kb/serverless-microservice-manager#readme",
+  "bugs": {
+    "url": "https://github.com/aa2kb/serverless-microservice-manager/issues",
+    "email": "contact@amin.pk"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/aa2kb/serverless-microservice-manager.git"
+  },
   "main": "src/index.js",
   "scripts": {
     "lint": "node_modules/.bin/eslint src/**/*.js --ext .js --format=pretty",
@@ -16,7 +25,7 @@
     "feature",
     "lift"
   ],
-  "author": "Amin Ahmed Khan <hi@amin.pk> (https://github.com/aminahmedkhan)",
+  "author": "Amin Ahmed Khan <contact@amin.pk> (https://github.com/aa2kb)",
   "maintainers": [],
   "license": "MIT",
   "dependencies": {
