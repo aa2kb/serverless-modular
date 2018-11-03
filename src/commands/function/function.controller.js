@@ -8,9 +8,9 @@ class functionClass {
     return new Promise(async (resolve, reject) => {
       try {
         const feature = this.options.feature;
-        const name = this.options.name;
-        const HTTPMethod = this.options.method;
-        const HTTPPath = this.options.path;
+        const name = this.options.name.toLowerCase();
+        const HTTPMethod = this.options.method.toUpperCase();
+        const HTTPPath = this.options.path.toLowerCase();
         const functionFilePath = `${this.cwd}/src/${feature}/${feature}-functions.yml`;
         const handlerFilePath = `${this.cwd}/src/${feature}/${feature}-handler.js`;
         if (!fs.existsSync(functionFilePath)) {
@@ -21,15 +21,20 @@ class functionClass {
         }
         const functionsJson = await utils.ymltoJson(functionFilePath);
         for (const i in functionsJson.functions) {
-          if (i.toLowerCase() === name.toLowerCase()) {
+          if (i.toLowerCase() === name) {
             throw new Error(`Function "${i.toLowerCase()}" already exists in feature "${feature}"`);
+          }
+          for (const j in functionsJson.functions.events) {
+            if (functionsJson.functions.events[j].http && functionsJson.functions.events[j].http.path.toLowerCase() === HTTPPath) {
+              throw new Error(`HTTP Path "${HTTPPath}" already exists in feature "${feature}"`);
+            }
           }
         }
         functionsJson.functions[name] = {
           handler: `${feature}-handler.${name}`,
           events: [{
             http: {
-              method: `${HTTPMethod.toUpperCase() || 'GET'}`,
+              method: `${HTTPMethod || 'GET'}`,
               path: `${HTTPPath || name}`,
               cors: true
             }
