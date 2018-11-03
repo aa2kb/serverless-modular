@@ -1,7 +1,7 @@
 
-const utils = require('../../utils');
 const fsPath = require('fs-path');
 const fs = require('fs');
+const utils = require('../../utils');
 
 async function updateGitignore(cwd) {
   const gitIgnorePath = `${cwd}/.gitignore`;
