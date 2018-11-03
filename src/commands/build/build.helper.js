@@ -25,7 +25,7 @@ function adjustPlugin(serverlessConfig) {
     if (!serverlessConfig.plugins.includes(slsDomainManager)) {
       serverlessConfig.plugins.push(slsDomainManager);
     }
-    _.pull(serverlessConfig.plugins, 'serverless-feature-manager');
+    _.pull(serverlessConfig.plugins, 'serverless-microservice-manager');
   } else {
     serverlessConfig.plugins = [slsDomainManager];
   }
