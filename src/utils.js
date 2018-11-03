@@ -19,8 +19,18 @@ function getFeaturePath(source) {
   return fs.readdirSync(source).map(name => path.join(source, name)).filter(isDirectory);
 }
 
+function existsInFile(text, filePath) {
+  return fs.readFileSync(filePath).indexOf(text) >= 0;
+}
+
+function fileExits(filePath) {
+  return fs.existsSync(filePath);
+}
+
 module.exports = {
   ymltoJson,
   jsontoYml,
-  getFeaturePath
+  getFeaturePath,
+  existsInFile,
+  fileExits
 };

@@ -15,14 +15,16 @@ class ServerlessPlugin {
         commands: {
           feature: commands.smmFeature.command,
           function: commands.smmFunction.command,
-          build: commands.smmBuild.command
+          build: commands.smmBuild.command,
+          init: commands.smmInit.command
         }
       }
     };
     this.hooks = {
       'smm:feature:featureHandler': commands.smmFeature.controller.bind(this),
       'smm:function:createFunction': commands.smmFunction.controller.bind(this),
-      'smm:build:createFunctionsYml': commands.smmBuild.controller.bind(this)
+      'smm:build:createFunctionsYml': commands.smmBuild.controller.bind(this),
+      'smm:init:initHandler': commands.smmInit.controller.bind(this),
     };
   }
 }
