@@ -1,6 +1,6 @@
 {
   "name": "serverless-microservice-manager",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "serverless framework plugin for feature management",
   "homepage": "https://github.com/aa2kb/serverless-microservice-manager#readme",
   "bugs": {
