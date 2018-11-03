@@ -4,6 +4,6 @@ var {feature}Ctrl = new {featureInitCap}();
 module.exports.test = async (event, context, callback) => {
   const response = await {feature}Ctrl.sendTestResponse();
 
-  callback(null, response);
+  return response;
 };
 

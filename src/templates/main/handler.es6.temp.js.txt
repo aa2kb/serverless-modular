@@ -4,6 +4,6 @@ const {feature}Ctrl = new {featureInitCap}();
 export async function test(event, context, callback) {
   const response = await {feature}Ctrl.sendTestResponse();
 
-  callback(null, response);
+  return response;
 };
 

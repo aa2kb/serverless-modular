@@ -8,8 +8,7 @@ export default class {feature}Controller {
         'Access-Control-Allow-Origin': '*'
       },
       body: JSON.stringify({
-        message: 'Running {feature} feature test handler. Yay SMM!',
-        input: event,
+        message: 'Running {feature} feature test handler. SMM is AWESOME!'
       }),
     });
   });
