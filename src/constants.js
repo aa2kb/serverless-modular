@@ -8,18 +8,27 @@ const Constants = {
   }, {
     name: 'handler',
     extension: 'js',
-    template: fs.readFileSync(`${__dirname}/templates/main/handler.temp.js.txt`).toString()
+    template: {
+      es5: fs.readFileSync(`${__dirname}/templates/main/handler.es5.temp.js.txt`).toString(),
+      es6: fs.readFileSync(`${__dirname}/templates/main/handler.es6.temp.js.txt`).toString()
+    }
   }, {
     name: 'controller',
     extension: 'js',
-    template: fs.readFileSync(`${__dirname}/templates/main/controller.temp.js.txt`).toString()
+    template: {
+      es5: fs.readFileSync(`${__dirname}/templates/main/controller.es5.temp.js.txt`).toString(),
+      es6: fs.readFileSync(`${__dirname}/templates/main/controller.es6.temp.js.txt`).toString()
+    }
   }, {
     name: 'model',
     extension: 'js',
     template: fs.readFileSync(`${__dirname}/templates/main/model.temp.js.txt`).toString()
   }],
   templates: {
-    addFunction: fs.readFileSync(`${__dirname}/templates/components/newfunction.handler.temp.txt`).toString()
+    addFunction: {
+      es5: fs.readFileSync(`${__dirname}/templates/components/newfunction.es5.handler.temp.txt`).toString(),
+      es6: fs.readFileSync(`${__dirname}/templates/components/newfunction.es6.handler.temp.txt`).toString(),
+    }
   }
 };
 

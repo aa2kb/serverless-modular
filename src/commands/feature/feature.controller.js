@@ -2,15 +2,26 @@ const fsPath = require('fs-path');
 const format = require('string-template');
 const fs = require('fs');
 const rimraf = require('rimraf');
+const featureHelper = require('./feature.helper');
+const utils = require('../../utils');
 
 class featureClass {
   featureHandler() {
     const createFeatureFiles = function () {
-      return new Promise((resolve, reject) => {
+      return new Promise(async (resolve, reject) => {
         try {
+          const mainServerlessYmlPath = `${this.cwd}/serverless.yml`;
+          const serverlessConfig = await utils.ymltoJson(mainServerlessYmlPath);
+          const esVersion = featureHelper.getEsVersion(serverlessConfig);
           for (const i in this.featureSet) {
             const file = `${this.options.name}-${this.featureSet[i].name}.${this.featureSet[i].extension}`.toLowerCase();
             const path = `${this.cwd}/src/${this.options.name}/${file}`.toLowerCase();
+            let template;
+            if (this.featureSet[i].name === 'controller' || this.featureSet[i].name === 'handler') {
+              template = this.featureSet[i].template[esVersion];
+            } else {
+              template = this.featureSet[i].template;
+            }
             const formatData = {
               feature: this.options.name,
               basePath: this.options.basePath || this.options.name
@@ -19,7 +30,7 @@ class featureClass {
             if (fs.existsSync(path)) {
               this.serverless.cli.log(`already exists ${file}`);
             } else {
-              fsPath.writeFileSync(path, format(this.featureSet[i].template, formatData));
+              fsPath.writeFileSync(path, format(template, formatData));
               this.serverless.cli.log(`generated ${file}`);
             }
           }

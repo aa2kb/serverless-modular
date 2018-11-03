@@ -8,7 +8,7 @@ export default class {feature}Controller {
         'Access-Control-Allow-Origin': '*'
       },
       body: JSON.stringify({
-        message: 'Running {feature} feture test handeler. Yay SMM!',
+        message: 'Running {feature} feature test handler. Yay SMM!',
         input: event,
       }),
     });
