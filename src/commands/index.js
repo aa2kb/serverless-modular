@@ -1,33 +1,33 @@
-const smmFeatureCommand = require('./feature/feature.command');
-const smmFunctionCommand = require('./function/function.command');
-const smmBuildCommand = require('./build/build.command');
-const smmInitCommand = require('./init/init.command');
+const smFeatureCommand = require('./feature/feature.command');
+const smFunctionCommand = require('./function/function.command');
+const smBuildCommand = require('./build/build.command');
+const smInitCommand = require('./init/init.command');
 
-const SmmFeatureController = require('./feature/feature.controller');
-const SmmFunctionController = require('./function/function.controller');
-const SmmBuildController = require('./build/build.controller');
-const SmmInitController = require('./init/init.controller');
+const SmFeatureController = require('./feature/feature.controller');
+const SmFunctionController = require('./function/function.controller');
+const SmBuildController = require('./build/build.controller');
+const SmInitController = require('./init/init.controller');
 
-const smmFeatureController = new SmmFeatureController();
-const smmFunctionController = new SmmFunctionController();
-const smmBuildController = new SmmBuildController();
-const smmInitController = new SmmInitController();
+const smFeatureController = new SmFeatureController();
+const smFunctionController = new SmFunctionController();
+const smBuildController = new SmBuildController();
+const smInitController = new SmInitController();
 
 module.exports = {
-  smmFeature: {
-    command: smmFeatureCommand,
-    controller: smmFeatureController.featureHandler
+  smFeature: {
+    command: smFeatureCommand,
+    controller: smFeatureController.featureHandler
   },
-  smmFunction: {
-    command: smmFunctionCommand,
-    controller: smmFunctionController.createFunction
+  smFunction: {
+    command: smFunctionCommand,
+    controller: smFunctionController.createFunction
   },
-  smmBuild: {
-    command: smmBuildCommand,
-    controller: smmBuildController.createFunctionsYml
+  smBuild: {
+    command: smBuildCommand,
+    controller: smBuildController.createFunctionsYml
   },
-  smmInit: {
-    command: smmInitCommand,
-    controller: smmInitController.initHandler
+  smInit: {
+    command: smInitCommand,
+    controller: smInitController.initHandler
   }
 };

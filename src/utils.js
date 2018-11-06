@@ -30,11 +30,11 @@ function fileExits(filePath) {
 
 function getEsVersion(serverlessConfig) {
   const validEsVersion = ['es6', 'es5'];
-  if (serverlessConfig.custom && serverlessConfig.custom.smmConfig && serverlessConfig.custom.smmConfig.esVersion) {
-    if (validEsVersion.includes(serverlessConfig.custom.smmConfig.esVersion)) {
-      return serverlessConfig.custom.smmConfig.esVersion;
+  if (serverlessConfig.custom && serverlessConfig.custom.smConfig && serverlessConfig.custom.smConfig.esVersion) {
+    if (validEsVersion.includes(serverlessConfig.custom.smConfig.esVersion)) {
+      return serverlessConfig.custom.smConfig.esVersion;
     }
-    throw new Error('Invalid esVersion at smmConfig in serverless.yml');
+    throw new Error('Invalid esVersion at smConfig in serverless.yml');
   } else {
     return 'es6';
   }

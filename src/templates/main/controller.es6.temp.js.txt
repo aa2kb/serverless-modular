@@ -8,7 +8,7 @@ export default class {feature}Controller {
         'Access-Control-Allow-Origin': '*'
       },
       body: JSON.stringify({
-        message: 'Running {feature} feature test handler. SMM is AWESOME!'
+        message: 'Go Serverless Modular! Your {feature} function executed successfully!'
       }),
     });
   });

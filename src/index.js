@@ -12,10 +12,10 @@ class ServerlessPlugin {
     this.featureSet = this.constants.featureSet;
     const baseCommand = {
       commands: {
-        feature: commands.smmFeature.command,
-        function: commands.smmFunction.command,
-        build: commands.smmBuild.command,
-        init: commands.smmInit.command
+        feature: commands.smFeature.command,
+        function: commands.smFunction.command,
+        build: commands.smBuild.command,
+        init: commands.smInit.command
       }
     };
     this.commands = {
@@ -23,10 +23,18 @@ class ServerlessPlugin {
       m: baseCommand
     };
     this.hooks = {
-      'smm:feature:featureHandler': commands.smmFeature.controller.bind(this),
-      'smm:function:createFunction': commands.smmFunction.controller.bind(this),
-      'smm:build:createFunctionsYml': commands.smmBuild.controller.bind(this),
-      'smm:init:initHandler': commands.smmInit.controller.bind(this),
+      // main commands
+      'modular:feature:featureHandler': commands.smFeature.controller.bind(this),
+      'modular:function:createFunction': commands.smFunction.controller.bind(this),
+      'modular:build:createFunctionsYml': commands.smBuild.controller.bind(this),
+      'modular:init:initHandler': commands.smInit.controller.bind(this),
+
+      // alias commands
+      'm:feature:featureHandler': commands.smFeature.controller.bind(this),
+      'm:function:createFunction': commands.smFunction.controller.bind(this),
+      'm:build:createFunctionsYml': commands.smBuild.controller.bind(this),
+      'm:init:initHandler': commands.smInit.controller.bind(this),
+
     };
   }
 }

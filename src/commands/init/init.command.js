@@ -1,5 +1,5 @@
 const initCommands = {
-  usage: 'Helps you lay out the foundation for smm plugin',
+  usage: 'Helps you lay out the foundation for sm plugin',
   lifecycleEvents: [
     'initHandler'
   ]

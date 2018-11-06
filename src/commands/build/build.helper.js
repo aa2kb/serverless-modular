@@ -94,7 +94,7 @@ async function buildLocalSLSConfig(serverlessConfig, basePath, cwd, feature, fun
 }
 
 async function globalBuild(featureFunctions, feature, cwd) {
-  const mainFunctionsPath = `${cwd}/smm.functions.yml`;
+  const mainFunctionsPath = `${cwd}/sm.functions.yml`;
   const mainFunctions = await buildGlobalFunctions(featureFunctions);
   fsPath.writeFileSync(mainFunctionsPath, utils.jsontoYml(mainFunctions.functions));
 }
