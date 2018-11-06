@@ -10,15 +10,17 @@ class ServerlessPlugin {
     this.constants = constants;
     this.cwd = process.cwd();
     this.featureSet = this.constants.featureSet;
-    this.commands = {
-      smm: {
-        commands: {
-          feature: commands.smmFeature.command,
-          function: commands.smmFunction.command,
-          build: commands.smmBuild.command,
-          init: commands.smmInit.command
-        }
+    const baseCommand = {
+      commands: {
+        feature: commands.smmFeature.command,
+        function: commands.smmFunction.command,
+        build: commands.smmBuild.command,
+        init: commands.smmInit.command
       }
+    };
+    this.commands = {
+      modular: baseCommand,
+      m: baseCommand
     };
     this.hooks = {
       'smm:feature:featureHandler': commands.smmFeature.controller.bind(this),
