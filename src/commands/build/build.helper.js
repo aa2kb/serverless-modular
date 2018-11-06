@@ -16,24 +16,26 @@ function adjustPackage(serverlessConfig) {
       include: [npmPath]
     };
   }
-  return serverlessConfig.package;
+  return serverlessConfig;
 }
 
 function adjustPlugin(serverlessConfig) {
   const slsDomainManager = 'serverless-domain-manager';
+  const addDomainManager = _.get(serverlessConfig, 'custom.smConfig.build.add-domain-manager', false);
   if (serverlessConfig.plugins) {
-    if (!serverlessConfig.plugins.includes(slsDomainManager)) {
+    if (!serverlessConfig.plugins.includes(slsDomainManager) && addDomainManager) {
       serverlessConfig.plugins.push(slsDomainManager);
     }
     _.pull(serverlessConfig.plugins, 'serverless-modular');
-  } else {
+  } else if (addDomainManager) {
     serverlessConfig.plugins = [slsDomainManager];
   }
-  return serverlessConfig.plugins;
+  return serverlessConfig;
 }
 
 function adjustCustom(serverlessConfig, basePath) {
-  if (serverlessConfig.custom) {
+  const addDomainManager = _.get(serverlessConfig, 'custom.smConfig.build.add-domain-manager', false);
+  if (serverlessConfig.custom && addDomainManager) {
     if (serverlessConfig.custom.customDomain) {
       serverlessConfig.custom = {
         ...serverlessConfig.custom,
@@ -43,8 +45,14 @@ function adjustCustom(serverlessConfig, basePath) {
         }
       };
     }
+  } else if (serverlessConfig.custom) {
+    delete serverlessConfig.custom.customDomain;
   }
-  return serverlessConfig.custom;
+  serverlessConfig.custom = _.omit(serverlessConfig.custom, ['smConfig']);
+  if (_.keys(serverlessConfig.custom).length <= 0) {
+    delete serverlessConfig.custom;
+  }
+  return serverlessConfig;
 }
 
 async function buildGlobalFunctions(featureFunctions) {
@@ -79,9 +87,9 @@ async function buildLocalSLSConfig(serverlessConfig, basePath, cwd, feature, fun
     const functionName = `${i}`;
     localFeatureFunctions[functionName] = currentFunction;
     serverlessConfig.functions = localFeatureFunctions;
-    serverlessConfig.package = adjustPackage(serverlessConfig);
-    serverlessConfig.plugins = adjustPlugin(serverlessConfig);
-    serverlessConfig.custom = adjustCustom(serverlessConfig, basePath);
+    serverlessConfig = adjustPackage(serverlessConfig);
+    serverlessConfig = adjustPlugin(serverlessConfig);
+    serverlessConfig = adjustCustom(serverlessConfig, basePath);
     localFeatureServerlessYmlPath = `${cwd}/src/${feature.name}/serverless.yml`;
     fsPath.writeFileSync(localFeatureServerlessYmlPath, utils.jsontoYml(serverlessConfig));
     const options = {
@@ -111,9 +119,6 @@ async function localBuild(featureFunctions, feature, cwd) {
 }
 
 module.exports = {
-  adjustPackage,
-  adjustPlugin,
-  adjustCustom,
   globalBuild,
   localBuild
 };
