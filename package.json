@@ -1,15 +1,15 @@
 {
-  "name": "serverless-microservice-manager",
-  "version": "0.0.3",
+  "name": "serverless-modular",
+  "version": "0.0.1",
   "description": "serverless framework plugin for feature management",
-  "homepage": "https://github.com/aa2kb/serverless-microservice-manager#readme",
+  "homepage": "https://github.com/aa2kb/serverless-modular#readme",
   "bugs": {
-    "url": "https://github.com/aa2kb/serverless-microservice-manager/issues",
+    "url": "https://github.com/aa2kb/serverless-modular/issues",
     "email": "contact@amin.pk"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/aa2kb/serverless-microservice-manager.git"
+    "url": "https://github.com/aa2kb/serverless-modular.git"
   },
   "main": "src/index.js",
   "scripts": {
