@@ -36,7 +36,7 @@ function getEsVersion(serverlessConfig) {
     }
     throw new Error('Invalid esVersion at smConfig in serverless.yml');
   } else {
-    return 'es6';
+    return 'es5';
   }
 }
 
