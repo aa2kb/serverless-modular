@@ -22,7 +22,10 @@ const Constants = {
   }, {
     name: 'model',
     extension: 'js',
-    template: fs.readFileSync(`${__dirname}/templates/main/model.temp.js.txt`).toString()
+    template: {
+      es5: fs.readFileSync(`${__dirname}/templates/main/model.es5.temp.js.txt`).toString(),
+      es6: fs.readFileSync(`${__dirname}/templates/main/model.es6.temp.js.txt`).toString(),
+    }
   }],
   templates: {
     addFunction: {

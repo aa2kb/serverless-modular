@@ -1,0 +1,5 @@
+class {feature}Model {
+
+}
+
+module.exports = {feature}Model;

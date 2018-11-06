@@ -1,0 +1,6 @@
+
+function {feature}Model(){
+  // Constructor
+}
+
+module.exports = {feature}Model;

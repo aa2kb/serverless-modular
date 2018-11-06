@@ -13,11 +13,14 @@ class featureClass {
           const mainServerlessYmlPath = `${this.cwd}/serverless.yml`;
           const serverlessConfig = await utils.ymltoJson(mainServerlessYmlPath);
           const esVersion = utils.getEsVersion(serverlessConfig);
+          if (fs.existsSync(`${this.cwd}/src/${this.options.name}`)) {
+            throw new Error(`Feature '${this.options.name}' Already exists`);
+          }
           for (const i in this.featureSet) {
             const file = `${this.options.name}-${this.featureSet[i].name}.${this.featureSet[i].extension}`.toLowerCase();
             const path = `${this.cwd}/src/${this.options.name}/${file}`.toLowerCase();
             let template;
-            if (this.featureSet[i].name === 'controller' || this.featureSet[i].name === 'handler') {
+            if (this.featureSet[i].name === 'controller' || this.featureSet[i].name === 'handler' || this.featureSet[i].name === 'model') {
               template = this.featureSet[i].template[esVersion];
             } else {
               template = this.featureSet[i].template;
