@@ -8,7 +8,7 @@ class functionClass {
     return new Promise(async (resolve, reject) => {
       try {
         const mainServerlessYmlPath = `${this.cwd}/serverless.yml`;
-        const serverlessConfig = await utils.ymltoJson(mainServerlessYmlPath);
+        const serverlessConfig = await utils.ymlToJson(mainServerlessYmlPath);
         const esVersion = utils.getEsVersion(serverlessConfig);
         const feature = this.options.feature;
         const name = this.options.name.toLowerCase();
@@ -24,7 +24,7 @@ class functionClass {
         if (!fs.existsSync(handlerFilePath)) {
           throw new Error(`ENOENT: no such file or directory, open '${handlerFilePath}'\n\n Feature '${feature}-handler.js' file does not exists`);
         }
-        const functionsJson = await utils.ymltoJson(functionFilePath);
+        const functionsJson = await utils.ymlToJson(functionFilePath);
         for (const i in functionsJson.functions) {
           if (i.toLowerCase() === name) {
             throw new Error(`Function "${i.toLowerCase()}" already exists in feature "${feature}"`);

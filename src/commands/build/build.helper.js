@@ -59,7 +59,7 @@ async function buildGlobalFunctions(featureFunctions) {
   const functions = {};
   let basePath;
   for (const f of featureFunctions) {
-    const functionYml = await utils.ymltoJson(f.path);
+    const functionYml = await utils.ymlToJson(f.path);
     basePath = functionYml.basePath;
     for (const i in functionYml.functions) {
       const currentFunction = functionYml.functions[i];
@@ -109,9 +109,9 @@ async function globalBuild(featureFunctions, feature, cwd) {
 
 async function localBuild(featureFunctions, feature, cwd) {
   const mainServerlessYmlPath = `${cwd}/serverless.yml`;
-  const serverlessConfig = await utils.ymltoJson(mainServerlessYmlPath);
+  const serverlessConfig = await utils.ymlToJson(mainServerlessYmlPath);
   for (const f of featureFunctions) {
-    const functionYml = await utils.ymltoJson(f.path);
+    const functionYml = await utils.ymlToJson(f.path);
     const basePath = functionYml.basePath;
     serverlessConfig.service = `${serverlessConfig.service}-${f.name}`;
     await buildLocalSLSConfig(serverlessConfig, basePath, cwd, f, functionYml);

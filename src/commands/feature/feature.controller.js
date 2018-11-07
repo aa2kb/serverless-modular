@@ -11,7 +11,7 @@ class featureClass {
       return new Promise(async (resolve, reject) => {
         try {
           const mainServerlessYmlPath = `${this.cwd}/serverless.yml`;
-          const serverlessConfig = await utils.ymltoJson(mainServerlessYmlPath);
+          const serverlessConfig = await utils.ymlToJson(mainServerlessYmlPath);
           const esVersion = utils.getEsVersion(serverlessConfig);
           if (fs.existsSync(`${this.cwd}/src/${this.options.name}`)) {
             throw new Error(`Feature '${this.options.name}' Already exists`);

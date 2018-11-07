@@ -3,7 +3,7 @@ const jsonYml = require('json-to-pretty-yaml');
 const fs = require('fs');
 const path = require('path');
 
-async function ymltoJson(filename) {
+async function ymlToJson(filename) {
   return jsYaml.safeLoad(await fs.readFileAsync(filename, 'utf8').then(data => data));
 }
 
@@ -41,7 +41,7 @@ function getEsVersion(serverlessConfig) {
 }
 
 module.exports = {
-  ymltoJson,
+  ymlToJson,
   jsontoYml,
   getFeaturePath,
   existsInFile,
