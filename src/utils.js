@@ -2,6 +2,7 @@ const jsYaml = require('js-yaml');
 const jsonYml = require('json-to-pretty-yaml');
 const fs = require('fs');
 const path = require('path');
+const _ = require('lodash');
 
 async function ymlToJson(filename) {
   try {
@@ -48,10 +49,20 @@ async function checkIfBasePathIsInUse(srcPath, newBasePath) {
   const results = await Promise.all(promises);
   for (const basePath of results) {
     if (basePath === newBasePath) {
-      return false;
+      return true;
     }
   }
-  return true;
+  return false;
+}
+
+async function checkIfBasePathDuplicate(srcPath) {
+  const features = getFeaturePath(srcPath);
+  const promises = [];
+  for (const f of features) {
+    promises.push(getBasePath(f.path));
+  }
+  const allBasePaths = await Promise.all(promises);
+  return _.uniq(allBasePaths).length !== allBasePaths.length;
 }
 
 function existsInFile(text, filePath) {
@@ -82,5 +93,6 @@ module.exports = {
   existsInFile,
   fileExits,
   getEsVersion,
-  checkIfBasePathIsInUse
+  checkIfBasePathIsInUse,
+  checkIfBasePathDuplicate
 };

@@ -19,7 +19,7 @@ class featureClass {
             featureInitCap: _.startCase(this.options.name),
             basePath: this.options.basePath || this.options.name
           };
-          const basePathExists = utils.checkIfBasePathIsInUse(srcPath, formatData.basePath);
+          const basePathExists = fs.existsSync(srcPath) ? await utils.checkIfBasePathIsInUse(srcPath, formatData.basePath) : false;
           if (fs.existsSync(`${this.cwd}/src/${this.options.name}`)) {
             throw new Error(`Feature '${this.options.name}' Already exists`);
           }
