@@ -4,7 +4,11 @@ const fs = require('fs');
 const path = require('path');
 
 async function ymlToJson(filename) {
-  return jsYaml.safeLoad(await fs.readFileAsync(filename, 'utf8').then(data => data));
+  try {
+    return jsYaml.safeLoad(await fs.readFileAsync(filename, 'utf8').then(data => data));
+  } catch (err) {
+    throw (err);
+  }
 }
 
 function jsontoYml(jsonData) {
@@ -16,7 +20,38 @@ function isDirectory(source) {
 }
 
 function getFeaturePath(source) {
-  return fs.readdirSync(source).map(name => path.join(source, name)).filter(isDirectory);
+  return fs.readdirSync(source).map(name => path.join(source, name)).filter(isDirectory).map((f) => {
+    const fSplit = f.split('/');
+    const fName = fSplit[fSplit.length - 1];
+    return {
+      path: `${f}/${fName}-functions.yml`,
+      name: fName
+    };
+  });
+}
+
+async function getBasePath(ymlPath) {
+  try {
+    const functionYml = await ymlToJson(ymlPath);
+    return functionYml.basePath;
+  } catch (err) {
+    throw (err);
+  }
+}
+
+async function checkIfBasePathIsInUse(srcPath, newBasePath) {
+  const features = getFeaturePath(srcPath);
+  const promises = [];
+  for (const f of features) {
+    promises.push(getBasePath(f.path));
+  }
+  const results = await Promise.all(promises);
+  for (const basePath of results) {
+    if (basePath === newBasePath) {
+      return false;
+    }
+  }
+  return true;
 }
 
 function existsInFile(text, filePath) {
@@ -46,5 +81,6 @@ module.exports = {
   getFeaturePath,
   existsInFile,
   fileExits,
-  getEsVersion
+  getEsVersion,
+  checkIfBasePathIsInUse
 };

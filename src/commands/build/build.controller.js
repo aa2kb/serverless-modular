@@ -16,16 +16,8 @@ class buildClass {
         name: feature
       }];
     } else {
-      featureFunctions = utils.getFeaturePath(srcPath).map((f) => {
-        const fSplit = f.split('/');
-        const fName = fSplit[fSplit.length - 1];
-        return {
-          path: `${f}/${fName}-functions.yml`,
-          name: fName
-        };
-      });
+      featureFunctions = utils.getFeaturePath(srcPath);
     }
-
     if (scope === 'local') {
       await buildHelper.localBuild(featureFunctions, feature, this.cwd);
       this.serverless.cli.log(`Local '${featureFunctions.map(f => f.name).join()}' feature build successful`);

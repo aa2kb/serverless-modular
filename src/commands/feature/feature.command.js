@@ -23,7 +23,7 @@ const featureCommands = {
         'Specify the basepath you want for your feature '
         + '(e.g. "--basepath \'users\'" or "-b \'users\'")',
       required: false,
-      shortcut: 'b',
+      shortcut: 'p',
     }
   }
 };

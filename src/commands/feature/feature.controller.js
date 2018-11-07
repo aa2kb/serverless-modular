@@ -13,8 +13,18 @@ class featureClass {
           const mainServerlessYmlPath = `${this.cwd}/serverless.yml`;
           const serverlessConfig = await utils.ymlToJson(mainServerlessYmlPath);
           const esVersion = utils.getEsVersion(serverlessConfig);
+          const srcPath = `${this.cwd}/src`;
+          const formatData = {
+            feature: this.options.name,
+            featureInitCap: _.startCase(this.options.name),
+            basePath: this.options.basePath || this.options.name
+          };
+          const basePathExists = utils.checkIfBasePathIsInUse(srcPath, formatData.basePath);
           if (fs.existsSync(`${this.cwd}/src/${this.options.name}`)) {
             throw new Error(`Feature '${this.options.name}' Already exists`);
+          }
+          if (basePathExists) {
+            throw new Error(`basePath '${formatData.basePath}' Already exists`);
           }
           for (const i in this.featureSet) {
             const file = `${this.options.name}-${this.featureSet[i].name}.${this.featureSet[i].extension}`.toLowerCase();
@@ -25,12 +35,6 @@ class featureClass {
             } else {
               template = this.featureSet[i].template;
             }
-            const formatData = {
-              feature: this.options.name,
-              featureInitCap: _.startCase(this.options.name),
-              basePath: this.options.basePath || this.options.name
-            };
-
             if (fs.existsSync(path)) {
               this.serverless.cli.log(`already exists ${file}`);
             } else {
