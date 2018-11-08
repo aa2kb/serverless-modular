@@ -20,14 +20,22 @@ function isDirectory(source) {
   return fs.lstatSync(source).isDirectory();
 }
 
-function getFeaturePath(source) {
+function getFeaturePath(source, onlyFeatures, filterFeatures) {
   return fs.readdirSync(source).map(name => path.join(source, name)).filter(isDirectory).map((f) => {
     const fSplit = f.split('/');
     const fName = fSplit[fSplit.length - 1];
+    if (onlyFeatures) {
+      return {
+        path: f,
+        name: fName
+      };
+    }
     return {
       path: `${f}/${fName}-functions.yml`,
       name: fName
     };
+  }).filter((feature) => {
+    return filterFeatures ? filterFeatures.includes(feature.name) : true;
   });
 }
 
