@@ -21,7 +21,30 @@ const slsSteps = [
 const Progress = clui.Progress;
 const ProgressBar = new Progress(20);
 let onStep = 0;
-let multiStep = {};
+const multiStep = {};
+
+function getCombinedLog(completedFeatureName) {
+  let combinedLogs = '';
+  for (const i in multiStep) {
+    if (completedFeatureName === i) {
+      multiStep[i] = 100;
+    }
+    let stepText = multiStep[i] < 10 ? slsSteps[multiStep[i]] : 'Cleaning up';
+    if (multiStep[i] === 100) {
+      stepText = 'Deployment Complete';
+    }
+    let finalLog = `${ProgressBar.update(multiStep[i] / 10)} ${stepText} (${i})`;
+    if (multiStep[i] === 100) {
+      finalLog = `✅  ${finalLog}`;
+    } else if (multiStep[i] >= 10) {
+      finalLog = `🆗 ${finalLog}`;
+    } else {
+      finalLog = `⬆️  ${finalLog}`;
+    }
+    combinedLogs = `${combinedLogs}${finalLog}\n`;
+  }
+  return combinedLogs;
+}
 
 function deployProgress(data) {
   const stdOut = data;
@@ -44,21 +67,23 @@ function deployMultiProgress(data) {
   const stdOut = data;
   for (const i in slsSteps) {
     if (_.includes(stdOut, slsSteps[i])) {
-      multiStep[featureName] = parseInt(i, 10);
+      if (multiStep[featureName] !== 100) {
+        multiStep[featureName] = parseInt(i, 10);
+      }
       break;
     }
   }
-  let combinedLogs = '';
-  for (const i in multiStep) {
-    const stepText = multiStep[i] < 10 ? slsSteps[multiStep[i]] : 'Deployment Complete';
-    const finalLog = `${ProgressBar.update(multiStep[i] / 10)} ${stepText} (${i})`;
-    combinedLogs = `${combinedLogs}${finalLog}\n`;
-  }
-  logUpdate(combinedLogs);
+  logUpdate(getCombinedLog());
 }
 
 function deployDone() {
   // console.log('Deployment Complete');
+}
+
+function deployMultiDone() {
+  const featurePath = this.cwd;
+  const featureName = featurePath.split('/')[featurePath.split('/').length - 1];
+  logUpdate(getCombinedLog(featureName));
 }
 
 async function globalDeploy(cwd, deployOpts) {
@@ -87,12 +112,14 @@ async function localDeploy(cwd, deployOpts, parallel, features) {
   for (const i in allFeatures) {
     const featureName = allFeatures[i].name;
     multiStep[featureName] = 0;
-    slsCommands.push({ command: `sls deploy ${deployOpts} `, cwd: allFeatures[i].path, onData: deployMultiProgress });
+    slsCommands.push({
+      command: `sls deploy ${deployOpts} `, cwd: allFeatures[i].path, onData: deployMultiProgress, onDone: deployMultiDone
+    });
   }
   let combinedLogs = '';
   for (const i in multiStep) {
     const stepText = multiStep[i] < 10 ? slsSteps[multiStep[i]] : 'Deployment Complete';
-    const finalLog = `${ProgressBar.update(multiStep[i] / 10)} ${stepText} (${i})`;
+    const finalLog = `⬆️  ${ProgressBar.update(multiStep[i] / 10)} ${stepText} (${i})`;
     combinedLogs = `${combinedLogs}${finalLog}\n`;
   }
   logUpdate(combinedLogs);
