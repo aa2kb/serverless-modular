@@ -15,7 +15,8 @@ class ServerlessPlugin {
         feature: commands.smFeature.command,
         function: commands.smFunction.command,
         build: commands.smBuild.command,
-        init: commands.smInit.command
+        init: commands.smInit.command,
+        deploy: commands.smDeploy.command,
       }
     };
     this.commands = {
@@ -28,12 +29,14 @@ class ServerlessPlugin {
       'modular:function:createFunction': commands.smFunction.controller.bind(this),
       'modular:build:createFunctionsYml': commands.smBuild.controller.bind(this),
       'modular:init:initHandler': commands.smInit.controller.bind(this),
+      'modular:deploy:deployHandler': commands.smDeploy.controller.bind(this),
 
       // alias commands
       'm:feature:featureHandler': commands.smFeature.controller.bind(this),
       'm:function:createFunction': commands.smFunction.controller.bind(this),
       'm:build:createFunctionsYml': commands.smBuild.controller.bind(this),
       'm:init:initHandler': commands.smInit.controller.bind(this),
+      'm:deploy:deployHandler': commands.smDeploy.controller.bind(this),
 
     };
   }
