@@ -23,18 +23,19 @@ const ProgressBar = new Progress(20);
 let onStep = 0;
 const multiStep = {};
 
-function getCombinedLog(completedFeatureName) {
+function getCombinedLog(completedFeatureName, exitCode) {
   let combinedLogs = '';
+  const isError = exitCode && exitCode !== 0;
+  const isCompleted = completedFeatureName && !isError;
   for (const i in multiStep) {
-    if (completedFeatureName === i) {
-      multiStep[i] = 100;
-    }
     let stepText = multiStep[i] < 10 ? slsSteps[multiStep[i]] : 'Cleaning up';
-    if (multiStep[i] === 100) {
+    if (isCompleted) {
       stepText = 'Deployment Complete';
     }
     let finalLog = `${ProgressBar.update(multiStep[i] / 10)} ${stepText} (${i})`;
-    if (multiStep[i] === 100) {
+    if (isError) {
+      finalLog = `❎  ${finalLog}`;
+    } else if (isCompleted) {
       finalLog = `✅  ${finalLog}`;
     } else if (multiStep[i] >= 10) {
       finalLog = `🆗 ${finalLog}`;
@@ -67,7 +68,7 @@ function deployMultiProgress(data) {
   const stdOut = data;
   for (const i in slsSteps) {
     if (_.includes(stdOut, slsSteps[i])) {
-      if (multiStep[featureName] !== 100) {
+      if (multiStep[featureName] !== 100 || multiStep[featureName] !== -1) {
         multiStep[featureName] = parseInt(i, 10);
       }
       break;
@@ -80,10 +81,10 @@ function deployDone() {
   // console.log('Deployment Complete');
 }
 
-function deployMultiDone() {
+function deployMultiDone(exitCode) {
   const featurePath = this.cwd;
   const featureName = featurePath.split('/')[featurePath.split('/').length - 1];
-  logUpdate(getCombinedLog(featureName));
+  logUpdate(getCombinedLog(featureName, exitCode));
 }
 
 async function globalDeploy(cwd, deployOpts) {
