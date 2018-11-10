@@ -3,6 +3,8 @@ const nrc = require('node-run-cmd');
 const clui = require('clui');
 const _ = require('lodash');
 const logUpdate = require('log-update');
+const fs = require('fs');
+const fsPath = require('fs-path');
 const utils = require('../../utils');
 
 const slsSteps = [
@@ -26,16 +28,18 @@ const multiStep = {};
 function getCombinedLog(completedFeatureName, exitCode) {
   let combinedLogs = '';
   const isError = exitCode && exitCode !== 0;
-  const isCompleted = completedFeatureName && !isError;
   for (const i in multiStep) {
+    if (completedFeatureName === i) {
+      multiStep[i] = 100;
+    }
     let stepText = multiStep[i] < 10 ? slsSteps[multiStep[i]] : 'Cleaning up';
-    if (isCompleted) {
+    if (multiStep[i] === 100) {
       stepText = 'Deployment Complete';
     }
     let finalLog = `${ProgressBar.update(multiStep[i] / 10)} ${stepText} (${i})`;
     if (isError) {
       finalLog = `❎  ${finalLog}`;
-    } else if (isCompleted) {
+    } else if (multiStep[i] === 100) {
       finalLog = `✅  ${finalLog}`;
     } else if (multiStep[i] >= 10) {
       finalLog = `🆗 ${finalLog}`;
@@ -66,6 +70,7 @@ function deployMultiProgress(data) {
   const featurePath = this.cwd;
   const featureName = featurePath.split('/')[featurePath.split('/').length - 1];
   const stdOut = data;
+  fs.appendFileSync(`${featurePath}/.sm.log`, data, { flag: 'a+' });
   for (const i in slsSteps) {
     if (_.includes(stdOut, slsSteps[i])) {
       if (multiStep[featureName] !== 100 || multiStep[featureName] !== -1) {
@@ -112,10 +117,12 @@ async function localDeploy(cwd, deployOpts, parallel, features) {
   }
   for (const i in allFeatures) {
     const featureName = allFeatures[i].name;
+    const featureCwd = allFeatures[i].path;
     multiStep[featureName] = 0;
     slsCommands.push({
-      command: `sls deploy ${deployOpts} `, cwd: allFeatures[i].path, onData: deployMultiProgress, onDone: deployMultiDone
+      command: `sls deploy ${deployOpts} `, cwd: featureCwd, onData: deployMultiProgress, onDone: deployMultiDone
     });
+    fsPath.writeFileSync(`${featureCwd}/.sm.log`, '');
   }
   let combinedLogs = '';
   for (const i in multiStep) {
