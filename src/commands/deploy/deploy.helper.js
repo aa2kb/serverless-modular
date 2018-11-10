@@ -29,7 +29,7 @@ function getCombinedLog(completedFeatureName, exitCode) {
   let combinedLogs = '';
   const isError = exitCode && exitCode !== 0;
   for (const i in multiStep) {
-    if (completedFeatureName === i) {
+    if (completedFeatureName === i && !isError) {
       multiStep[i] = 100;
     }
     let stepText = multiStep[i] < 10 ? slsSteps[multiStep[i]] : 'Cleaning up';
