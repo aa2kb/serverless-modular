@@ -21,12 +21,12 @@ class deployClass {
         switch (scope) {
           case 'local':
             await buildHelper.localBuild(featureFunctions, null, cwd);
-            this.serverless.cli.log('Local build successful');
+            utils.log.info('Local build successful');
             await deployHelper.localDeploy(cwd, savedOpts, parallel, features);
             break;
           case 'global':
             await buildHelper.globalBuild(featureFunctions, null, cwd);
-            this.serverless.cli.log('Global build successful');
+            utils.log.info('Global build successful');
             await deployHelper.globalDeploy(cwd, savedOpts);
             break;
           default:

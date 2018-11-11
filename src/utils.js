@@ -3,6 +3,7 @@ const jsonYml = require('json-to-pretty-yaml');
 const fs = require('fs');
 const path = require('path');
 const _ = require('lodash');
+const chalk = require('chalk');
 
 async function ymlToJson(filename) {
   try {
@@ -94,6 +95,18 @@ function getEsVersion(serverlessConfig) {
   }
 }
 
+function logger(data, error) {
+  console.log(`${error ? '⚠️' : 'ℹ️'}  Serverless-Modular: ${chalk.yellow(data)}`);
+}
+const log = {
+  info(data) {
+    logger(data);
+  },
+  warn(data) {
+    logger(data, true);
+  }
+}
+
 module.exports = {
   ymlToJson,
   jsontoYml,
@@ -102,5 +115,6 @@ module.exports = {
   fileExits,
   getEsVersion,
   checkIfBasePathIsInUse,
-  checkIfBasePathDuplicate
+  checkIfBasePathDuplicate,
+  log
 };

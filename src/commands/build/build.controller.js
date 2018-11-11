@@ -24,10 +24,10 @@ class buildClass {
     }
     if (scope === 'local') {
       await buildHelper.localBuild(featureFunctions, feature, this.cwd);
-      this.serverless.cli.log(`Local '${featureFunctions.map(f => f.name).join()}' feature build successful`);
+      utils.log.info(`Local '${featureFunctions.map(f => f.name).join()}' feature build successful`);
     } else {
       await buildHelper.globalBuild(featureFunctions, feature, this.cwd);
-      this.serverless.cli.log(`${feature ? `Global '${feature}' Feature` : 'Global'} build successful`);
+      utils.log.info(`${feature ? `Global '${feature}' Feature` : 'Global'} build successful`);
     }
   }
 }

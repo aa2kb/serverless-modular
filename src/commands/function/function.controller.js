@@ -53,7 +53,7 @@ class functionClass {
         const newFunction = `\n${format(this.constants.templates.addFunction[esVersion], formatData)}\n`;
         fs.appendFileSync(handlerFilePath, newFunction);
         resolve();
-        this.serverless.cli.log(`"${name}" function added in feature "${feature}"`);
+        utils.log.info(`"${name}" function added in feature "${feature}"`);
       } catch (err) {
         reject(err);
       }

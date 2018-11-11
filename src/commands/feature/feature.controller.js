@@ -36,10 +36,10 @@ class featureClass {
               template = this.featureSet[i].template;
             }
             if (fs.existsSync(path)) {
-              this.serverless.cli.log(`already exists ${file}`);
+              utils.log.warn(`already exists ${file}`);
             } else {
               fsPath.writeFileSync(path, format(template, formatData));
-              this.serverless.cli.log(`generated ${file}`);
+              utils.log.info(`generated ${file}`);
             }
           }
           resolve();
@@ -57,7 +57,7 @@ class featureClass {
             if (err) {
               throw (err);
             }
-            this.serverless.cli.log(`${this.options.name} feature removed`);
+            utils.log.info(`${this.options.name} feature removed`);
             resolve();
           });
         } catch (err) {
