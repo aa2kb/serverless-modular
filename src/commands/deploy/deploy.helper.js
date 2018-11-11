@@ -23,8 +23,10 @@ const slsSteps = [
 const Progress = clui.Progress;
 const ProgressBar = new Progress(20);
 let onStep = 0;
+let onStatus;
 const multiStep = {};
 let logsPath = '';
+let mainLogsPath = '';
 
 function getCombinedLog(completedFeatureName, exitCode) {
   let combinedLogs = '';
@@ -45,7 +47,7 @@ function getCombinedLog(completedFeatureName, exitCode) {
       finalLog = `❎  ${finalLog}`;
     } else if (multiStep[i].status === 'done-complete') {
       finalLog = `✅  ${finalLog}`;
-    } else if (multiStep[i] >= 10) {
+    } else if (multiStep[i].progress >= 10) {
       finalLog = `🆗 ${finalLog}`;
     } else {
       finalLog = `⬆️  ${finalLog}`;
@@ -55,19 +57,35 @@ function getCombinedLog(completedFeatureName, exitCode) {
   return combinedLogs + logsPath;
 }
 
+function getCombinedLogMain() {
+  let stepText = onStep < 10 ? slsSteps[onStep] : 'Cleaning up';
+  if (onStatus === 'done-complete') {
+    stepText = 'Deployment Complete';
+  }
+  let finalLog = `${ProgressBar.update(onStep / 10)} ${stepText}`;
+  if (onStatus === 'done-error') {
+    finalLog = `❎  ${finalLog}`;
+  } else if (onStatus === 'done-complete') {
+    finalLog = `✅  ${finalLog}`;
+  } else if (onStep >= 10) {
+    finalLog = `🆗 ${finalLog}`;
+  } else {
+    finalLog = `⬆️  ${finalLog}`;
+  }
+  return `${finalLog}\n${mainLogsPath}`;
+}
+
 function deployProgress(data) {
   const stdOut = data;
+  const cwd = this.cwd;
+  fs.appendFileSync(`${cwd}/.sm.log`, data, { flag: 'a+' });
   for (const i in slsSteps) {
     if (_.includes(stdOut, slsSteps[i])) {
       onStep = parseInt(i, 10);
-      if (onStep === 9 || onStep === 10) {
-        logUpdate(data);
-        logUpdate.done();
-      }
       break;
     }
   }
-  logUpdate(`${onStep < 10 ? `${ProgressBar.update(onStep / 10)} ${slsSteps[onStep]}` : 'Deployment Complete'}`);
+  logUpdate(`${getCombinedLogMain()}`);
 }
 
 function deployMultiProgress(data) {
@@ -86,8 +104,13 @@ function deployMultiProgress(data) {
   logUpdate(getCombinedLog());
 }
 
-function deployDone() {
-  // console.log('Deployment Complete');
+function deployDone(exitCode) {
+  if (exitCode !== 0) {
+    onStatus = 'done-error';
+  } else {
+    onStatus = 'done-complete';
+  }
+  logUpdate(`${getCombinedLogMain()}`);
 }
 
 function deployMultiDone(exitCode) {
@@ -104,7 +127,8 @@ async function globalDeploy(cwd, deployOpts) {
       onDone: deployDone,
       cwd
     };
-    logUpdate(`${ProgressBar.update(0)} ${slsSteps[0]} `);
+    mainLogsPath = `▶️  Logs: ${`${cwd}/.sm.log`}`;
+    logUpdate(`⬆️  ${ProgressBar.update(0)} ${slsSteps[0]}\n${mainLogsPath}`);
     await nrc.run(command, options);
   } catch (err) {
     throw (err);
