@@ -1,5 +1,7 @@
 const _ = require('lodash');
 const deployHelper = require('./deploy.helper');
+const buildHelper = require('./../build/build.helper');
+const utils = require('../../utils');
 
 class deployClass {
   deployHandler() {
@@ -7,6 +9,8 @@ class deployClass {
     const scope = this.options['sm-scope'] || 'local';
     const parallel = this.options['sm-parallel'] === 'true';
     let features = this.options['sm-features'];
+    const srcPath = `${this.cwd}/src`;
+    const featureFunctions = utils.getFeaturePath(srcPath);
     features = features ? features.split(',') : null;
     const cwd = this.cwd;
     return new Promise(async (resolve, reject) => {
@@ -16,9 +20,13 @@ class deployClass {
         }
         switch (scope) {
           case 'local':
+            await buildHelper.localBuild(featureFunctions, null, cwd);
+            this.serverless.cli.log('Local build successful');
             await deployHelper.localDeploy(cwd, savedOpts, parallel, features);
             break;
           case 'global':
+            await buildHelper.globalBuild(featureFunctions, null, cwd);
+            this.serverless.cli.log('Global build successful');
             await deployHelper.globalDeploy(cwd, savedOpts);
             break;
           default:
