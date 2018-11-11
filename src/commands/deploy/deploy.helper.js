@@ -30,16 +30,19 @@ function getCombinedLog(completedFeatureName, exitCode) {
   const isError = exitCode && exitCode !== 0;
   for (const i in multiStep) {
     if (completedFeatureName === i && !isError) {
-      multiStep[i] = 100;
+      multiStep[i].status = 'complete';
+    } else if (completedFeatureName === i && isError) {
+      multiStep[i].status = 'error';
     }
-    let stepText = multiStep[i] < 10 ? slsSteps[multiStep[i]] : 'Cleaning up';
-    if (multiStep[i] === 100) {
+
+    let stepText = multiStep[i].progress < 10 ? slsSteps[multiStep[i].progress] : 'Cleaning up';
+    if (multiStep[i].progress === 100) {
       stepText = 'Deployment Complete';
     }
-    let finalLog = `${ProgressBar.update(multiStep[i] / 10)} ${stepText} (${i})`;
-    if (isError) {
+    let finalLog = `${ProgressBar.update(multiStep[i].progress / 10)} ${stepText} (${i})`;
+    if (multiStep[i].status === 'error') {
       finalLog = `❎  ${finalLog}`;
-    } else if (multiStep[i] === 100) {
+    } else if (multiStep[i].status === 'complete') {
       finalLog = `✅  ${finalLog}`;
     } else if (multiStep[i] >= 10) {
       finalLog = `🆗 ${finalLog}`;
@@ -73,8 +76,8 @@ function deployMultiProgress(data) {
   fs.appendFileSync(`${featurePath}/.sm.log`, data, { flag: 'a+' });
   for (const i in slsSteps) {
     if (_.includes(stdOut, slsSteps[i])) {
-      if (multiStep[featureName] !== 100 || multiStep[featureName] !== -1) {
-        multiStep[featureName] = parseInt(i, 10);
+      if (multiStep[featureName].progress !== 100 || multiStep[featureName].progress !== -1) {
+        multiStep[featureName].progress = parseInt(i, 10);
       }
       break;
     }
@@ -118,7 +121,10 @@ async function localDeploy(cwd, deployOpts, parallel, features) {
   for (const i in allFeatures) {
     const featureName = allFeatures[i].name;
     const featureCwd = allFeatures[i].path;
-    multiStep[featureName] = 0;
+    multiStep[featureName] = {
+      status: 'start',
+      progress: 0
+    };
     slsCommands.push({
       command: `sls deploy ${deployOpts} `, cwd: featureCwd, onData: deployMultiProgress, onDone: deployMultiDone
     });
@@ -126,8 +132,7 @@ async function localDeploy(cwd, deployOpts, parallel, features) {
   }
   let combinedLogs = '';
   for (const i in multiStep) {
-    const stepText = multiStep[i] < 10 ? slsSteps[multiStep[i]] : 'Deployment Complete';
-    const finalLog = `⬆️  ${ProgressBar.update(multiStep[i] / 10)} ${stepText} (${i})`;
+    const finalLog = `⬆️  ${ProgressBar.update(multiStep[i].progress / 10)} ${slsSteps[0]} (${i})`;
     combinedLogs = `${combinedLogs}${finalLog}\n`;
   }
   logUpdate(combinedLogs);
