@@ -30,19 +30,19 @@ function getCombinedLog(completedFeatureName, exitCode) {
   const isError = exitCode && exitCode !== 0;
   for (const i in multiStep) {
     if (completedFeatureName === i && !isError) {
-      multiStep[i].status = 'complete';
+      multiStep[i].status = 'done-complete';
     } else if (completedFeatureName === i && isError) {
-      multiStep[i].status = 'error';
+      multiStep[i].status = 'done-error';
     }
 
     let stepText = multiStep[i].progress < 10 ? slsSteps[multiStep[i].progress] : 'Cleaning up';
-    if (multiStep[i].progress === 100) {
+    if (multiStep[i].status === 'done-complete') {
       stepText = 'Deployment Complete';
     }
     let finalLog = `${ProgressBar.update(multiStep[i].progress / 10)} ${stepText} (${i})`;
-    if (multiStep[i].status === 'error') {
+    if (multiStep[i].status === 'done-error') {
       finalLog = `❎  ${finalLog}`;
-    } else if (multiStep[i].status === 'complete') {
+    } else if (multiStep[i].status === 'done-complete') {
       finalLog = `✅  ${finalLog}`;
     } else if (multiStep[i] >= 10) {
       finalLog = `🆗 ${finalLog}`;
@@ -76,7 +76,7 @@ function deployMultiProgress(data) {
   fs.appendFileSync(`${featurePath}/.sm.log`, data, { flag: 'a+' });
   for (const i in slsSteps) {
     if (_.includes(stdOut, slsSteps[i])) {
-      if (multiStep[featureName].progress !== 100 || multiStep[featureName].progress !== -1) {
+      if (!multiStep[featureName].status.includes('done-')) {
         multiStep[featureName].progress = parseInt(i, 10);
       }
       break;
@@ -122,7 +122,7 @@ async function localDeploy(cwd, deployOpts, parallel, features) {
     const featureName = allFeatures[i].name;
     const featureCwd = allFeatures[i].path;
     multiStep[featureName] = {
-      status: 'start',
+      status: 'in-progress',
       progress: 0
     };
     slsCommands.push({
