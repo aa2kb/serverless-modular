@@ -10,9 +10,7 @@ class featureClass {
     const createFeatureFiles = function () {
       return new Promise(async (resolve, reject) => {
         try {
-          const mainServerlessYmlPath = `${this.cwd}/serverless.yml`;
-          const serverlessConfig = await utils.ymlToJson(mainServerlessYmlPath);
-          const esVersion = utils.getEsVersion(serverlessConfig);
+          const esVersion = _.get(this.serverless, 'variables.service.custom.smConfig.esVersion', 'es5');
           const srcPath = `${this.cwd}/src`;
           const formatData = {
             feature: this.options.name,

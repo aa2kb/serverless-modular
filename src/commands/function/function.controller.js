@@ -1,15 +1,14 @@
 const fsPath = require('fs-path');
 const fs = require('fs');
 const format = require('string-template');
+const _ = require('lodash');
 const utils = require('../../utils');
 
 class functionClass {
   createFunction() {
     return new Promise(async (resolve, reject) => {
       try {
-        const mainServerlessYmlPath = `${this.cwd}/serverless.yml`;
-        const serverlessConfig = await utils.ymlToJson(mainServerlessYmlPath);
-        const esVersion = utils.getEsVersion(serverlessConfig);
+        const esVersion = _.get(this.serverless, 'variables.service.custom.smConfig.esVersion', 'es5');
         const feature = this.options.feature;
         const name = this.options.name.toLowerCase();
         let HTTPMethod = this.options.method || 'get';
