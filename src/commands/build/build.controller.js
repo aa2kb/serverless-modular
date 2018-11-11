@@ -9,10 +9,14 @@ class buildClass {
     const basePathDuplicate = await utils.checkIfBasePathDuplicate(srcPath);
     let featureFunctions = [];
     if (scope && (scope !== 'local' && scope !== 'global')) {
-      throw new Error('Invalid use of scope flag\n\n only set to "--scope local or --scope global" while using this flag');
+      const errMsg = 'Invalid use of scope flag\n\n only set to "--scope local or --scope global" while using this flag'
+      utils.log.errorMessage(errMsg);
+      throw new Error(errMsg);
     }
     if (basePathDuplicate) {
-      throw new Error('Duplicate basePath found in one of the feature functions.yml');
+      const errMsg = 'Duplicate basePath found in one of the feature functions.yml';
+      utils.log.errorMessage(errMsg);
+      throw new Error(errMsg);
     }
     if (feature) {
       featureFunctions = [{

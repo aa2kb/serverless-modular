@@ -104,8 +104,20 @@ const log = {
   },
   warn(data) {
     logger(data, true);
+  },
+  errorMessage(message) {
+    console.log(`
+  ${chalk.yellow('Serverless Modular Error ---------------------------------------')}
+
+  ${message}
+  
+  ${chalk.yellow('Get Support --------------------------------------------')}
+    ${chalk.yellow('Docs:')}         github.com/aa2kb/serverless-modular#readme
+    ${chalk.yellow('Bugs:')}         github.com/aa2kb/serverless-modular/issues
+    ${chalk.yellow('Github:')}       github.com/aa2kb/serverless-modular
+    `);
   }
-}
+};
 
 module.exports = {
   ymlToJson,
