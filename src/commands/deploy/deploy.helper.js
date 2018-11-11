@@ -24,6 +24,7 @@ const Progress = clui.Progress;
 const ProgressBar = new Progress(20);
 let onStep = 0;
 const multiStep = {};
+let logsPath = '';
 
 function getCombinedLog(completedFeatureName, exitCode) {
   let combinedLogs = '';
@@ -51,7 +52,7 @@ function getCombinedLog(completedFeatureName, exitCode) {
     }
     combinedLogs = `${combinedLogs}${finalLog}\n`;
   }
-  return combinedLogs;
+  return combinedLogs + logsPath;
 }
 
 function deployProgress(data) {
@@ -129,6 +130,7 @@ async function localDeploy(cwd, deployOpts, parallel, features) {
       command: `sls deploy ${deployOpts} `, cwd: featureCwd, onData: deployMultiProgress, onDone: deployMultiDone
     });
     fsPath.writeFileSync(`${featureCwd}/.sm.log`, '');
+    logsPath += `▶️  ${featureName}: ${`${featureCwd}/.sm.log`}\n`;
   }
   let combinedLogs = '';
   for (const i in multiStep) {
