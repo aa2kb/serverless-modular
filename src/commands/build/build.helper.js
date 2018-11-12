@@ -83,25 +83,24 @@ async function buildGlobalFunctions(featureFunctions) {
 
 async function buildLocalSLSConfig(serverlessConfig, basePath, cwd, feature, functionYml) {
   const localFeatureFunctions = {};
-  let localFeatureServerlessYmlPath;
+  const localFeatureServerlessYmlPath = `${cwd}/src/${feature.name}/serverless.yml`;
   for (const i in functionYml.functions) {
     const currentFunction = functionYml.functions[i];
     currentFunction.handler = currentFunction.handler;
     const functionName = `${i}`;
     localFeatureFunctions[functionName] = currentFunction;
-    serverlessConfig.functions = localFeatureFunctions;
-    serverlessConfig = adjustPackage(serverlessConfig);
-    serverlessConfig = adjustPlugin(serverlessConfig);
-    serverlessConfig = adjustCustom(serverlessConfig, basePath);
-    localFeatureServerlessYmlPath = `${cwd}/src/${feature.name}/serverless.yml`;
-    fsPath.writeFileSync(localFeatureServerlessYmlPath, utils.jsontoYml(serverlessConfig));
-    const options = {
-      files: localFeatureServerlessYmlPath,
-      from: [/\$\{file\(/g],
-      to: '${file(../../',
-    };
-    await replace(options);
   }
+  serverlessConfig.functions = localFeatureFunctions;
+  serverlessConfig = adjustPackage(serverlessConfig);
+  serverlessConfig = adjustPlugin(serverlessConfig);
+  serverlessConfig = adjustCustom(serverlessConfig, basePath);
+  fsPath.writeFileSync(localFeatureServerlessYmlPath, utils.jsontoYml(serverlessConfig));
+  const options = {
+    files: localFeatureServerlessYmlPath,
+    from: [/\$\{file\(/g],
+    to: '${file(../../',
+  };
+  await replace(options);
 }
 
 async function globalBuild(featureFunctions, feature, cwd) {
