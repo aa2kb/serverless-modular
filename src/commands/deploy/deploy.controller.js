@@ -2,6 +2,7 @@ const _ = require('lodash');
 const deployHelper = require('./deploy.helper');
 const buildHelper = require('./../build/build.helper');
 const utils = require('../../utils');
+const messages = require('../../messages');
 
 class deployClass {
   deployHandler() {
@@ -13,13 +14,12 @@ class deployClass {
     const featureFunctions = utils.getFeaturePath(srcPath);
     features = features ? features.split(',') : null;
     const cwd = this.cwd;
-    const scopeErrMsg = 'Invalid use of scope flag\n\n only set to "--scope local or --scope global" while using this flag';
+    // const scopeErrMsg = 'Invalid use of scope flag\n\n only set to "--scope local or --scope global" while using this flag';
     return new Promise(async (resolve, reject) => {
       try {
         if (parallel && scope !== 'local') {
-          const errMsg = 'Use parallel deployments only when deploying local features';
-          utils.log.errorMessage(errMsg);
-          throw new Error(errMsg);
+          utils.log.errorMessage(messages.PARALLEL_FLAG_USAGE);
+          throw new Error(messages.PARALLEL_FLAG_USAGE);
         }
         switch (scope) {
           case 'local':
@@ -33,9 +33,8 @@ class deployClass {
             await deployHelper.globalDeploy(cwd, savedOpts);
             break;
           default:
-
-            utils.log.errorMessage(scopeErrMsg);
-            throw new Error(scopeErrMsg);
+            utils.log.errorMessage(messages.INVALID_SCOPE);
+            throw new Error(messages.INVALID_SCOPE);
         }
         resolve();
       } catch (err) {

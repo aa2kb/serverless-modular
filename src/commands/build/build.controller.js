@@ -1,5 +1,6 @@
 const buildHelper = require('./build.helper');
 const utils = require('../../utils');
+const messages = require('../../messages');
 
 class buildClass {
   async createFunctionsYml() {
@@ -9,14 +10,12 @@ class buildClass {
     const basePathDuplicate = await utils.checkIfBasePathDuplicate(srcPath);
     let featureFunctions = [];
     if (scope && (scope !== 'local' && scope !== 'global')) {
-      const errMsg = 'Invalid use of scope flag\n\n only set to "--scope local or --scope global" while using this flag'
-      utils.log.errorMessage(errMsg);
-      throw new Error(errMsg);
+      utils.log.errorMessage(messages.INVALID_SCOPE);
+      throw new Error(messages.INVALID_SCOPE);
     }
     if (basePathDuplicate) {
-      const errMsg = 'Duplicate basePath found in one of the feature functions.yml';
-      utils.log.errorMessage(errMsg);
-      throw new Error(errMsg);
+      utils.log.errorMessage(messages.DUPLICATE_PATH);
+      throw new Error(messages.DUPLICATE_PATH);
     }
     if (feature) {
       featureFunctions = [{

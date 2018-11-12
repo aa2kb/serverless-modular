@@ -3,6 +3,7 @@ const fs = require('fs');
 const format = require('string-template');
 const _ = require('lodash');
 const utils = require('../../utils');
+const messages = require('../../messages');
 
 class functionClass {
   createFunction() {
@@ -18,19 +19,23 @@ class functionClass {
         const functionFilePath = `${this.cwd}/src/${feature}/${feature}-functions.yml`;
         const handlerFilePath = `${this.cwd}/src/${feature}/${feature}-handler.js`;
         if (!fs.existsSync(functionFilePath)) {
-          throw new Error(`ENOENT: no such file or directory, open '${functionFilePath}'\n\n Feature '${feature}-functions.yml' file does not exists`);
+          utils.log.errorMessage(messages.FUNCTION_YML_NOT_EXISTS(functionFilePath, feature));
+          throw new Error(messages.FUNCTION_YML_NOT_EXISTS(functionFilePath, feature));
         }
         if (!fs.existsSync(handlerFilePath)) {
-          throw new Error(`ENOENT: no such file or directory, open '${handlerFilePath}'\n\n Feature '${feature}-handler.js' file does not exists`);
+          utils.log.errorMessage(messages.HANDLER_NOT_EXISTS(handlerFilePath, feature));
+          throw new Error(messages.HANDLER_NOT_EXISTS(handlerFilePath, feature));
         }
         const functionsJson = await utils.ymlToJson(functionFilePath);
         for (const i in functionsJson.functions) {
           if (i.toLowerCase() === name) {
-            throw new Error(`Function "${i.toLowerCase()}" already exists in feature "${feature}"`);
+            utils.log.errorMessage(messages.FUNCTION_ALREADY_EXISTS(i.toLowerCase(), feature));
+            throw new Error(messages.FUNCTION_ALREADY_EXISTS(i.toLowerCase(), feature));
           }
           for (const j in functionsJson.functions.events) {
             if (functionsJson.functions.events[j].http && functionsJson.functions.events[j].http.path.toLowerCase() === HTTPPath) {
-              throw new Error(`HTTP Path "${HTTPPath}" already exists in feature "${feature}"`);
+              utils.log.errorMessage(messages.HTTP_PATH_ALREADY_EXISTS(HTTPPath, feature));
+              throw new Error(messages.HTTP_PATH_ALREADY_EXISTS(HTTPPath, feature));
             }
           }
         }

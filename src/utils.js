@@ -4,6 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const _ = require('lodash');
 const chalk = require('chalk');
+const messages = require('./messages');
 
 async function ymlToJson(filename) {
   try {
@@ -35,7 +36,7 @@ function getFeaturePath(source, onlyFeatures, filterFeatures) {
       path: `${f}/${fName}-functions.yml`,
       name: fName
     };
-  }).filter((feature) => {
+  }).filter((feature) => { // eslint-disable-line
     return filterFeatures ? filterFeatures.includes(feature.name) : true;
   });
 }
@@ -82,19 +83,6 @@ function fileExits(filePath) {
   return fs.existsSync(filePath);
 }
 
-
-function getEsVersion(serverlessConfig) {
-  const validEsVersion = ['es6', 'es5'];
-  if (serverlessConfig.custom && serverlessConfig.custom.smConfig && serverlessConfig.custom.smConfig.esVersion) {
-    if (validEsVersion.includes(serverlessConfig.custom.smConfig.esVersion)) {
-      return serverlessConfig.custom.smConfig.esVersion;
-    }
-    throw new Error('Invalid esVersion at smConfig in serverless.yml');
-  } else {
-    return 'es5';
-  }
-}
-
 function logger(data, error) {
   console.log(`${error ? '⚠️' : 'ℹ️'}  Serverless-Modular: ${chalk.yellow(data)}`);
 }
@@ -118,6 +106,19 @@ const log = {
     `);
   }
 };
+
+function getEsVersion(serverlessConfig) {
+  const validEsVersion = ['es6', 'es5'];
+  if (serverlessConfig.custom && serverlessConfig.custom.smConfig && serverlessConfig.custom.smConfig.esVersion) {
+    if (validEsVersion.includes(serverlessConfig.custom.smConfig.esVersion)) {
+      return serverlessConfig.custom.smConfig.esVersion;
+    }
+    log.errorMessage.errorMessage(messages.INVALID_ES_VERSION);
+    throw new Error(messages.INVALID_ES_VERSION);
+  } else {
+    return 'es5';
+  }
+}
 
 module.exports = {
   ymlToJson,

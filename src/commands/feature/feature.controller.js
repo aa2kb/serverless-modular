@@ -4,6 +4,7 @@ const fs = require('fs');
 const rimraf = require('rimraf');
 const _ = require('lodash');
 const utils = require('../../utils');
+const messages = require('../../messages');
 
 class featureClass {
   featureHandler() {
@@ -19,10 +20,12 @@ class featureClass {
           };
           const basePathExists = fs.existsSync(srcPath) ? await utils.checkIfBasePathIsInUse(srcPath, formatData.basePath) : false;
           if (fs.existsSync(`${this.cwd}/src/${this.options.name}`)) {
-            throw new Error(`Feature '${this.options.name}' Already exists`);
+            utils.log.errorMessage(messages.FEATURE_ALREADY_EXISTS(this.options.name));
+            throw new Error(messages.FEATURE_ALREADY_EXISTS(this.options.name));
           }
           if (basePathExists) {
-            throw new Error(`basePath '${formatData.basePath}' Already exists`);
+            utils.log.errorMessage(messages.BASE_PATH_EXISTS(formatData.basePath));
+            throw new Error(messages.BASE_PATH_EXISTS(formatData.basePath));
           }
           for (const i in this.featureSet) {
             const file = `${this.options.name}-${this.featureSet[i].name}.${this.featureSet[i].extension}`.toLowerCase();
@@ -65,7 +68,8 @@ class featureClass {
     };
 
     if (this.options.remove && (this.options.remove !== 'true' && this.options.remove !== 'false')) {
-      throw new Error('Invalid use of remove flag\n\n only set to "--remove true or --remove false" while using this flag');
+      utils.log.errorMessage(messages.REMOVE_FLAG_USAGE);
+      throw new Error(messages.REMOVE_FLAG_USAGE);
     }
     return this.options.remove && this.options.remove.toString() === 'true'
       ? removeFeature.call(this)
