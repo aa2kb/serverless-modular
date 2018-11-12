@@ -3,7 +3,8 @@ const replace = require('replace-in-file');
 const fsPath = require('fs-path');
 const utils = require('../../utils');
 
-function adjustPackage(serverlessConfig) {
+function adjustPackage(slsConfig) {
+  const serverlessConfig = Object.assign({}, slsConfig);
   const npmPath = '../../node_modules';
   if (serverlessConfig.package) {
     if (serverlessConfig.package.include && !serverlessConfig.package.include.includes(npmPath)) {
@@ -19,7 +20,8 @@ function adjustPackage(serverlessConfig) {
   return serverlessConfig;
 }
 
-function adjustPlugin(serverlessConfig) {
+function adjustPlugin(slsConfig) {
+  const serverlessConfig = Object.assign({}, slsConfig);
   const slsDomainManager = 'serverless-domain-manager';
   const addDomainManager = _.get(serverlessConfig, 'custom.smConfig.build.add-domain-manager', false);
   if (serverlessConfig.plugins) {
@@ -33,7 +35,8 @@ function adjustPlugin(serverlessConfig) {
   return serverlessConfig;
 }
 
-function adjustCustom(serverlessConfig, basePath) {
+function adjustCustom(slsConfig, basePath) {
+  const serverlessConfig = Object.assign({}, slsConfig);
   const addDomainManager = _.get(serverlessConfig, 'custom.smConfig.build.add-domain-manager', false);
   if (serverlessConfig.custom && addDomainManager) {
     if (serverlessConfig.custom.customDomain) {
