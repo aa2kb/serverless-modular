@@ -10,4 +10,5 @@ module.exports = {
   HANDLER_NOT_EXISTS: (filePath, feature) => `ENOENT: no such file or directory, open '${filePath}'\n\n Feature '${feature}-handler.js' file does not exists`,
   FUNCTION_ALREADY_EXISTS: (functionName, feature) => `Function "${functionName}" already exists in feature "${feature}"`,
   HTTP_PATH_ALREADY_EXISTS: (HTTPPath, feature) => `HTTP Path "${HTTPPath}" already exists in feature "${feature}"`,
+  INVALID_BASE_PATH: basePath => `Invalid basePath only alpha numeric value accepted (can not start with dashes or underscore) "${basePath}"`,
 };

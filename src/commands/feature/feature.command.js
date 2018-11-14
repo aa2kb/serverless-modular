@@ -18,7 +18,7 @@ const featureCommands = {
       required: false,
       shortcut: 'r',
     },
-    basepath: {
+    basePath: {
       usage:
         'Specify the basepath you want for your feature '
         + '(e.g. "--basepath \'users\'" or "-b \'users\'")',

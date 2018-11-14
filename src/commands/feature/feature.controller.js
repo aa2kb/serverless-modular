@@ -18,6 +18,10 @@ class featureClass {
             featureInitCap: _.startCase(this.options.name),
             basePath: this.options.basePath || this.options.name
           };
+          if (!utils.validBasePath(formatData.basePath)) {
+            utils.log.errorMessage(messages.INVALID_BASE_PATH(this.options.name));
+            throw new Error(messages.INVALID_BASE_PATH(this.options.name));
+          }
           const basePathExists = fs.existsSync(srcPath) ? await utils.checkIfBasePathIsInUse(srcPath, formatData.basePath) : false;
           if (fs.existsSync(`${this.cwd}/src/${this.options.name}`)) {
             utils.log.errorMessage(messages.FEATURE_ALREADY_EXISTS(this.options.name));

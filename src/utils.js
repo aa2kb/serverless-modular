@@ -120,6 +120,13 @@ function getEsVersion(serverlessConfig) {
   }
 }
 
+function validBasePath(basePath) {
+  const validChars = basePath.search(/^[a-zA-Z0-9-_]+$/) === 0;
+  const startCheck = !(basePath.startsWith('_') || basePath.startsWith('-'));
+  const endCheck = !(basePath.endsWith('_') || basePath.endsWith('-'));
+  return validChars && startCheck && endCheck;
+}
+
 module.exports = {
   ymlToJson,
   jsontoYml,
@@ -129,5 +136,6 @@ module.exports = {
   getEsVersion,
   checkIfBasePathIsInUse,
   checkIfBasePathDuplicate,
-  log
+  log,
+  validBasePath
 };
