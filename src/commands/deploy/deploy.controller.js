@@ -8,7 +8,7 @@ class deployClass {
   deployHandler() {
     const savedOpts = _.get(this.serverless, 'variables.service.custom.smConfig.deploy.options', false);
     const scope = this.options['sm-scope'] || 'global';
-    const parallel = this.options['sm-parallel'] === 'true';
+    const parallel = this.options['sm-parallel'] ? this.options['sm-parallel'] === 'true' : true;
     let features = this.options['sm-features'];
     const srcPath = `${this.cwd}/src`;
     const featureFunctions = utils.getFeaturePath(srcPath);

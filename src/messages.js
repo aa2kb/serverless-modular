@@ -4,6 +4,7 @@ module.exports = {
   PARALLEL_FLAG_USAGE: 'Use parallel deployments only when deploying local features',
   INVALID_ES_VERSION: 'Invalid esVersion at smConfig in serverless.yml',
   REMOVE_FLAG_USAGE: 'Invalid use of remove flag\n\n only set to "--remove true or --remove false" while using this flag',
+  ERROR_REMOVING_FEATURE: 'Error Removing Feature',
   FEATURE_ALREADY_EXISTS: name => `Feature '${name}' Already exists`,
   BASE_PATH_EXISTS: name => `basePath '${name}' Already exists`,
   FUNCTION_YML_NOT_EXISTS: (filePath, feature) => `ENOENT: no such file or directory, open '${filePath}'\n\n Feature '${feature}-functions.yml' file does not exists`,
@@ -11,4 +12,5 @@ module.exports = {
   FUNCTION_ALREADY_EXISTS: (functionName, feature) => `Function "${functionName}" already exists in feature "${feature}"`,
   HTTP_PATH_ALREADY_EXISTS: (HTTPPath, feature) => `HTTP Path "${HTTPPath}" already exists in feature "${feature}"`,
   INVALID_BASE_PATH: basePath => `Invalid basePath only alpha numeric value accepted (can not start with dashes or underscore) "${basePath}"`,
+  FEATURE_REMOVED: feature => `${feature} feature removed`,
 };

@@ -2,6 +2,7 @@ const fsPath = require('fs-path');
 const format = require('string-template');
 const fs = require('fs');
 const rimraf = require('rimraf');
+const nrc = require('node-run-cmd');
 const _ = require('lodash');
 const utils = require('../../utils');
 const messages = require('../../messages');
@@ -55,16 +56,30 @@ class featureClass {
     };
 
     const removeFeature = function () {
-      return new Promise((resolve, reject) => {
+      return new Promise(async (resolve, reject) => {
         try {
+          const command = 'sls remove';
           const featurePath = `${this.cwd}/src/${this.options.name}`.toLowerCase();
-          rimraf(featurePath, (err) => {
-            if (err) {
-              throw (err);
-            }
-            utils.log.info(`${this.options.name} feature removed`);
-            resolve();
-          });
+          const options = {
+            onData: (data) => {
+              console.log(data);
+            },
+            onDone: (exitCode) => {
+              if (exitCode !== 0) {
+                utils.log.errorMessage(messages.ERROR_REMOVING_FEATURE);
+                return;
+              }
+              rimraf(featurePath, (err) => {
+                if (err) {
+                  throw (err);
+                }
+                utils.log.info(messages.FEATURE_REMOVED(this.options.name));
+                resolve();
+              });
+            },
+            cwd: featurePath
+          };
+          await nrc.run(command, options);
         } catch (err) {
           reject(err);
         }
