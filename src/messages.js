@@ -13,4 +13,5 @@ module.exports = {
   HTTP_PATH_ALREADY_EXISTS: (HTTPPath, feature) => `HTTP Path "${HTTPPath}" already exists in feature "${feature}"`,
   INVALID_BASE_PATH: basePath => `Invalid basePath only alpha numeric value accepted (can not start with dashes or underscore) "${basePath}"`,
   FEATURE_REMOVED: feature => `${feature} feature removed`,
+  FEATURE_FILE_NOT_EXISTS: slsFeaturePath => `${slsFeaturePath}\nFile does not exists`
 };

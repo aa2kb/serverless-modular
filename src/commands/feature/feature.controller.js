@@ -60,6 +60,12 @@ class featureClass {
         try {
           const command = 'sls remove';
           const featurePath = `${this.cwd}/src/${this.options.name}`.toLowerCase();
+          const slsFeaturePath = `\n${this.cwd}/src/${this.options.name}/serverless.yml`.toLowerCase();
+          if (!fs.existsSync(slsFeaturePath)) {
+            utils.log.errorMessage(messages.FEATURE_FILE_NOT_EXISTS(slsFeaturePath));
+            throw new Error(messages.FEATURE_FILE_NOT_EXISTS(slsFeaturePath));
+          }
+          utils.log.info(`Removing feature ${this.options.name}`);
           const options = {
             onData: (data) => {
               console.log(data);
