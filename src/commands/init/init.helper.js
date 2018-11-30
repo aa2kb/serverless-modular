@@ -12,8 +12,7 @@ async function updateGitignore(cwd) {
   const mainSlsDirectoryIgnoreStr = '\n# main serverless directories generated for sls deploy\n.serverless\n';
   const smLogsIgnoreStr = '\n# serverless logs file generated for feature sls deploy\nsrc/**/.sm.log\n';
   const mainSmLogsIgnoreStr = '\n# serverless logs file generated for main sls deploy\n.sm.log\n';
-  const webpackIgnoreStr = '\n# Webpack config copied in each feature\nsrc/**/webpack.config.js\n';
-  const fullGitIgnoreStr = `${nodeModulesIgnoreStr}${functionsIgnoreStr}${slsIgnoreStr}${mainSlsDirectoryIgnoreStr}${slsDirectoryIgnoreStr}${mainSmLogsIgnoreStr}${smLogsIgnoreStr}${webpackIgnoreStr}`;
+  const fullGitIgnoreStr = `${nodeModulesIgnoreStr}${functionsIgnoreStr}${slsIgnoreStr}${mainSlsDirectoryIgnoreStr}${slsDirectoryIgnoreStr}${mainSmLogsIgnoreStr}${smLogsIgnoreStr}`;
   if (!utils.fileExits(gitIgnorePath)) {
     fsPath.writeFileSync(gitIgnorePath, fullGitIgnoreStr);
   } else {
@@ -37,9 +36,6 @@ async function updateGitignore(cwd) {
     }
     if (!utils.existsInFile('src/**/.sm.log', gitIgnorePath)) {
       fs.appendFileSync(gitIgnorePath, smLogsIgnoreStr);
-    }
-    if (!utils.existsInFile('src/**/webpack.config.js', gitIgnorePath)) {
-      fs.appendFileSync(gitIgnorePath, webpackIgnoreStr);
     }
   }
 }

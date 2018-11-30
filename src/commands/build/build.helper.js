@@ -1,7 +1,6 @@
 const _ = require('lodash');
 const replace = require('replace-in-file');
 const fsPath = require('fs-path');
-const cpFile = require('cp-file');
 const utils = require('../../utils');
 
 function adjustPackage(slsConfig) {
@@ -36,7 +35,7 @@ function adjustPlugin(slsConfig) {
   return serverlessConfig;
 }
 
-function adjustCustom(slsConfig, basePath) {
+function adjustCustom(slsConfig, basePath, webpackExists) {
   const serverlessConfig = Object.assign({}, slsConfig);
   const addDomainManager = _.get(serverlessConfig, 'custom.smConfig.build.add-domain-manager', false);
   if (serverlessConfig.custom && addDomainManager) {
@@ -51,6 +50,17 @@ function adjustCustom(slsConfig, basePath) {
     }
   } else if (serverlessConfig.custom) {
     delete serverlessConfig.custom.customDomain;
+  }
+
+  if (webpackExists) {
+    const currentWebpackConfig = _.get(serverlessConfig, 'custom.webpackConfig.webpackConfig', 'webpack.config.js');
+    serverlessConfig.custom = {
+      ...serverlessConfig.custom,
+      webpackConfig: {
+        ...serverlessConfig.custom.webpackConfig,
+        webpackConfig: `../../${currentWebpackConfig}`
+      }
+    };
   }
   serverlessConfig.custom = _.omit(serverlessConfig.custom, ['smConfig']);
   if (_.keys(serverlessConfig.custom).length <= 0) {
@@ -85,8 +95,6 @@ async function buildGlobalFunctions(featureFunctions) {
 async function buildLocalSLSConfig(serverlessConfig, basePath, cwd, feature, functionYml) {
   const localFeatureFunctions = {};
   const localFeatureServerlessYmlPath = `${cwd}/src/${feature.name}/serverless.yml`;
-  const baseWebPackConfig = `${cwd}/webpack.config.js`;
-  const targetWebPackConfig = `${cwd}/src/${feature.name}/webpack.config.js`;
   const webpackExists = _.get(serverlessConfig, 'plugins').includes('serverless-webpack');
   for (const i in functionYml.functions) {
     const currentFunction = functionYml.functions[i];
@@ -97,11 +105,8 @@ async function buildLocalSLSConfig(serverlessConfig, basePath, cwd, feature, fun
   serverlessConfig.functions = localFeatureFunctions;
   serverlessConfig = adjustPackage(serverlessConfig);
   serverlessConfig = adjustPlugin(serverlessConfig);
-  serverlessConfig = adjustCustom(serverlessConfig, basePath);
+  serverlessConfig = adjustCustom(serverlessConfig, basePath, webpackExists);
   fsPath.writeFileSync(localFeatureServerlessYmlPath, utils.jsontoYml(serverlessConfig));
-  if (webpackExists) {
-    cpFile(baseWebPackConfig, targetWebPackConfig);
-  }
   const options = {
     files: localFeatureServerlessYmlPath,
     from: [/\$\{file\(/g],
