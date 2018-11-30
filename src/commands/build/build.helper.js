@@ -1,6 +1,7 @@
 const _ = require('lodash');
 const replace = require('replace-in-file');
 const fsPath = require('fs-path');
+const cpFile = require('cp-file');
 const utils = require('../../utils');
 
 function adjustPackage(slsConfig) {
@@ -84,6 +85,9 @@ async function buildGlobalFunctions(featureFunctions) {
 async function buildLocalSLSConfig(serverlessConfig, basePath, cwd, feature, functionYml) {
   const localFeatureFunctions = {};
   const localFeatureServerlessYmlPath = `${cwd}/src/${feature.name}/serverless.yml`;
+  const baseWebPackConfig = `${cwd}/webpack.config.js`;
+  const targetWebPackConfig = `${cwd}/src/${feature.name}/webpack.config.js`;
+  const webpackExists = _.get(serverlessConfig, 'plugins').includes('serverless-webpack');
   for (const i in functionYml.functions) {
     const currentFunction = functionYml.functions[i];
     currentFunction.handler = currentFunction.handler;
@@ -95,6 +99,9 @@ async function buildLocalSLSConfig(serverlessConfig, basePath, cwd, feature, fun
   serverlessConfig = adjustPlugin(serverlessConfig);
   serverlessConfig = adjustCustom(serverlessConfig, basePath);
   fsPath.writeFileSync(localFeatureServerlessYmlPath, utils.jsontoYml(serverlessConfig));
+  if (webpackExists) {
+    cpFile(baseWebPackConfig, targetWebPackConfig);
+  }
   const options = {
     files: localFeatureServerlessYmlPath,
     from: [/\$\{file\(/g],
