@@ -56,8 +56,8 @@ function adjustCustom(slsConfig, basePath, webpackExists) {
     const currentWebpackConfig = _.get(serverlessConfig, 'custom.webpackConfig.webpackConfig', 'webpack.config.js');
     serverlessConfig.custom = {
       ...serverlessConfig.custom,
-      webpackConfig: {
-        ...serverlessConfig.custom.webpackConfig,
+      webpack: {
+        ...serverlessConfig.custom.webpack,
         webpackConfig: `../../${currentWebpackConfig}`
       }
     };
