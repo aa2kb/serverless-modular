@@ -5,7 +5,7 @@ const messages = require('../../messages');
 class buildClass {
   async createFunctionsYml() {
     const feature = this.options.feature;
-    const scope = this.options.scope;
+    const scope = this.options.scope || 'local';
     const srcPath = `${this.cwd}/src`;
     const basePathDuplicate = await utils.checkIfBasePathDuplicate(srcPath);
     let featureFunctions = [];
