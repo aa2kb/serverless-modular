@@ -1,7 +1,13 @@
 export async function {func_name}(event, context, callback) {
   const response = {
-    success: true
+    statusCode: 200,
+    headers: {
+      'Access-Control-Allow-Origin': '*'
+    },
+    body: JSON.stringify({
+      message: 'Go Serverless Modular! Your users function executed successfully!'
+    }),
   };
 
-  callback(null, response);
+  return response;
 };
