@@ -125,7 +125,7 @@ This command comes with three options
 
 **--remove**: set value to true if you want to remove the feature
 
-**--basePath**: Specify the basepath you want for your feature, this base path should be unique for all features. _helps in running offline with [offline plugin](https://github.com/dherault/serverless-offline/issues)_
+**--basePath**: Specify the basepath you want for your feature, this base path should be unique for all features. _helps in running offline with [offline plugin](https://github.com/dherault/serverless-offline/issues) and for [API Gateway](https://aws.amazon.com/api-gateway/)_
 
 | options       | shortcut   |  required  |      values    |     default value   |
 | ------------- | :--------: | :--------: | -------------- | ------------------  |
