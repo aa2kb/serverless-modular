@@ -1,0 +1,18 @@
+service: sls-test
+
+plugins:
+  - serverless-modular
+  - serverless-webpack
+
+provider:
+  name: aws
+  runtime: 'nodejs8.10'
+  stage: test
+
+functions: ${file(./sm.functions.yml)}
+
+custom:   
+  customDomain:
+      domainName: 'api.sudofy.com'
+  smConfig:
+    esVersion: es6

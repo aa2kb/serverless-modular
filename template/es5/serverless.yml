@@ -1,0 +1,15 @@
+service: sls-test
+
+plugins:
+  - serverless-modular
+
+provider:
+  name: aws
+  runtime: 'nodejs8.10'
+  stage: test
+
+functions: ${file(./sm.functions.yml)}
+
+custom:   
+  smConfig:
+    esVersion: es5
