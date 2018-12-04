@@ -22,12 +22,14 @@ const functionCommands = {
       usage:
         'Specify the path for HTTP endpoint (API gateway)  '
         + '(e.g. "--path \'users\'" or "-p \'users\'")',
+      required: false,
       shortcut: 'p',
     },
     method: {
       usage:
         'Specify the path for HTTP method (API gateway)  '
         + '(e.g. "--method \'GET\'" or "-m \'GET\'")',
+      required: false,
       shortcut: 'm',
     }
   }
