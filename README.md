@@ -121,11 +121,11 @@ The feature command helps in building new features for your project
 
 This command comes with three options
 
-**--name**: The name of the feature that you want to create
+**--name**: Specify the name you want for your feature
 
-**--remove**: true or false, if you want to remove the feature
+**--remove**: set value to true if you want to remove the feature
 
-**--basePath**: this base path should be unique for all features. _helps in running offline with [offline plugin](https://github.com/dherault/serverless-offline/issues)_
+**--basePath**: Specify the basepath you want for your feature, this base path should be unique for all features. _helps in running offline with [offline plugin](https://github.com/dherault/serverless-offline/issues)_
 
 | options       | shortcut   |  required  |      values    |     default value   |
 | ------------- | :--------: | :--------: | -------------- | ------------------  |
@@ -241,7 +241,7 @@ $ sls m build -s global
 
 ### deploy command
 
-The build command helps in building the project for local or global scope
+The deploy command helps in deploying serverless projects to AWS (it uses `sls deploy` command)
 
 #### options (deploy Command)
 
