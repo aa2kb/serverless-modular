@@ -117,7 +117,7 @@ ___
 
 The feature command helps in building new features for your project
 
-#### options
+#### options (feature Command)
 
 This command comes with three options
 
@@ -135,21 +135,21 @@ This command comes with three options
 
 #### Examples (feature Command)
 
-#### Creating a basic feature
+##### Creating a basic feature
 
 ```yml
 # Creating a jedi feature
 $ sls m feature -n jedi
 ```
 
-#### Creating a feature with different base path
+##### Creating a feature with different base path
 
 ```yml
 # sls m feature -n jedi -p tatooine
 $ sls m feature -n jedi -r true
 ```
 
-#### Deleting a feature
+##### Deleting a feature
 
 ```yml
 # Anakin is going to delete the jedi feature
@@ -162,7 +162,7 @@ ___
 
 The function command helps in adding new function to a feature
 
-#### options
+#### options (function Command)
 
 This command comes with four options
 
@@ -183,33 +183,131 @@ This command comes with four options
 
 #### Examples (function Command)
 
-#### Creating a basic function
+##### Creating a basic function
 
 ```yml
 # Creating a cloak function for jedi feature
 $ sls m function -n cloak -f jedi
 ```
 
-#### Creating a basic function with different path and method
+##### Creating a basic function with different path and method
 
 ```yml
 # Creating a cloak function for jedi feature with custom path and HTTP method
 $ sls m function -n cloak -f jedi -p powers -n POST
 ```
 
+___
+
+### build command
+
+The build command helps in building the project for local or global scope
+
+#### options (build Command)
+
+This command comes with four options
+
+**--scope**: Specify the scope of the build, use this with "--feature" tag
+
+**--feature**: Specify the name of the existing feature you want to build
+
+| options       | shortcut   |  required  |      values    |     default value   |
+| ------------- | :--------: | :--------: | -------------- | ------------------  |
+| --scope       |    -s      |    ❎      | _string_       | local               |
+| --feature     |    -f      |    ❎      | _string_       | N/A                 |
+
+#### Examples (build Command)
+
+##### all feature build (local scope)
+
+```yml
+# Building all local features
+$ sls m build
+```
+
+##### Single feature build (local scope)
+
+```yml
+# Building a single feature
+$ sls m build -f jedi -s local
+```
+
+##### All features build global scope
+
+```yml
+# Building all features with global scope
+$ sls m build -s global
+```
+
+### deploy command
+
+The build command helps in building the project for local or global scope
+
+#### options (deploy Command)
+
+This command comes with four options
+
+**--sm-parallel**: Specify if you want to deploy parallel (will only run in parallel when doing multiple deployments)
+
+**--sm-scope**: Specify if you want to deploy local features or global
+
+**--sm-features**: Specify the local features you want to deploy (comma separated if multiple)
+
+| options       | shortcut|  required  |      values     |     default value   |
+| ------------- | :-----: | :--------: | --------------- | ------------------  |
+| --sm-parallel |   ❎    |    ❎      | _true, false_    | true                |
+| --sm-scope    |   ❎    |    ❎      | _local, global_  | local               |
+| --sm-features |   ❎    |    ❎      | _string_         | N/A                 |
+
+#### Examples (deploy Command)
+
+##### Deploy all features locally
+
+```yml
+# deploy all local features
+$ sls m deploy
+```
+
+##### Deploy all features globally
+
+```yml
+# deploy all global features
+$ sls m deploy --sm-scope global
+```
+
+##### Deploy single feature
+
+```yml
+# deploy all global features
+$ sls m deploy --sm-features jedi
+```
+
+##### Deploy Multiple features
+
+```yml
+# deploy all global features
+$ sls m deploy --sm-features jedi,sith,dark_side
+```
+
+##### Deploy Multiple features in sequence
+
+```yml
+# deploy all global features
+$ sls m deploy  --sm-features jedi,sith,dark_side --sm-parallel false
+```
+
+___
 
 ## Authors
 
 * **Amin Ahmed Khan** - *Project Creator* - [aa2kb](https://github.com/aa2kb)
 
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
+<!-- See also the list of [contributors]() who participated in this project.
 
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
 
-## Acknowledgments
+## Contributing
 
-* Hat tip to anyone whose code was used
-* Inspiration
-* etc
+Please read [CONTRIBUTING.md]() for details on our code of conduct, and the process for submitting pull requests to us. -->
