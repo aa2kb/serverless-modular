@@ -9,7 +9,7 @@ class deployClass {
     const savedOpts = _.get(this.serverless, 'variables.service.custom.smConfig.deploy.options', false);
     const scope = this.options['sm-scope'] || 'local';
     const parallel = this.options['sm-parallel'] ? this.options['sm-parallel'] === 'true' : true;
-    const ignoreBuild = this.options['--sm-ignore-build'] ? this.options['--sm-ignore-build'] === 'true' : false;
+    const ignoreBuild = this.options['sm-ignore-build'] ? this.options['sm-ignore-build'] === 'true' : false;
     let features = this.options['sm-features'];
     const srcPath = `${this.cwd}/src`;
     const featureFunctions = utils.getFeaturePath(srcPath);
