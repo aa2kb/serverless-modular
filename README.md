@@ -1,6 +1,6 @@
-# Serverless Modular
+# Serverless M
 
-Serverless Modular **(currently in beta)** is a plugin for the [serverless framework](https://serverless.com/). This plugins helps you in managing multiple serverless projects with a single serverless.yml file. This plugin gives you a super charged CLI options that you can use to create new features, build them in a single file and deploy them all in parallel
+Serverless M (or Serverless Modular) **(currently in beta)** is a plugin for the [serverless framework](https://serverless.com/). This plugins helps you in managing multiple serverless projects with a single serverless.yml file. This plugin gives you a super charged CLI options that you can use to create new features, build them in a single file and deploy them all in parallel
 
 Currently this plugin is tested for the below stack only
 
@@ -55,7 +55,7 @@ $ npm i serverless-modular --save-dev
 
 Now you are all done to start building your serverless modular functions
 
-## Serverless Modular CLI
+## API Reference
 
 The serverless CLI can be accessed by
 
