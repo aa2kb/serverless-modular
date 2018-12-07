@@ -7,17 +7,22 @@ const deployCommands = {
     'sm-parallel': {
       usage:
         'Specify if you want to deploy parallel '
-        + '(e.g. "--parallel \'true\'" or "-p \'true\'")',
+        + '(e.g. "--sm-parallel \'true\'")',
     },
     'sm-scope': {
       usage:
         'Specify if you want to deploy local features or global '
-        + '(e.g. "--scope \'local\'" or "-s \'global\'")',
+        + '(e.g. "--sm-scope \'local\'")',
     },
     'sm-features': {
       usage:
         'Specify the local features you want to deploy '
-        + '(e.g. "--feature \'users\'" or "-f \'users\'")',
+        + '(e.g. "--sm-feature \'users\'")',
+    },
+    'sm-ignore-build': {
+      usage:
+        'Specify if you want to ignore the build before deploy '
+        + '(e.g. "--sm-ignore-build \'true\'")',
     }
   }
 };
