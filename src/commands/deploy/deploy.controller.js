@@ -9,6 +9,7 @@ class deployClass {
     const savedOpts = _.get(this.serverless, 'variables.service.custom.smConfig.deploy.options', false);
     const scope = this.options['sm-scope'] || 'local';
     const parallel = this.options['sm-parallel'] ? this.options['sm-parallel'] === 'true' : true;
+    const ignoreBuild = this.options['--sm-ignore-build'] ? this.options['--sm-ignore-build'] === 'true' : false;
     let features = this.options['sm-features'];
     const srcPath = `${this.cwd}/src`;
     const featureFunctions = utils.getFeaturePath(srcPath);
@@ -23,13 +24,17 @@ class deployClass {
         }
         switch (scope) {
           case 'local':
-            await buildHelper.localBuild(featureFunctions, null, cwd);
-            utils.log.info('Local build successful');
+            if (!ignoreBuild) {
+              await buildHelper.localBuild(featureFunctions, null, cwd);
+              utils.log.info('Local build successful');
+            }
             await deployHelper.localDeploy(cwd, savedOpts, parallel, features);
             break;
           case 'global':
-            await buildHelper.globalBuild(featureFunctions, null, cwd);
-            utils.log.info('Global build successful');
+            if (!ignoreBuild) {
+              await buildHelper.globalBuild(featureFunctions, null, cwd);
+              utils.log.info('Global build successful');
+            }
             await deployHelper.globalDeploy(cwd, savedOpts);
             break;
           default:
