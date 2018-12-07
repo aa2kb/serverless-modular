@@ -128,6 +128,7 @@ async function globalDeploy(cwd, deployOpts) {
       cwd
     };
     mainLogsPath = `▶️  Logs: ${`${cwd}/.sm.log`}`;
+    fsPath.writeFileSync(`${cwd}/.sm.log`, '');
     logUpdate(`⬆️  ${ProgressBar.update(0)} ${slsSteps[0]}\n${mainLogsPath}`);
     await nrc.run(command, options);
   } catch (err) {
