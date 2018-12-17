@@ -7,11 +7,11 @@ const messages = require('../../messages');
 
 class deployClass {
   deployHandler() {
-    const savedOpts = _.get(this.serverless, 'variables.service.custom.smConfig.deploy.options', '');
-    const scope = this.options['sm-scope'] || 'global';
-    const parallel = this.options['sm-parallel'] ? this.options['sm-parallel'] === 'true' : true;
-    const ignoreBuild = this.options['sm-ignore-build'] ? this.options['sm-ignore-build'] === 'true' : false;
-    let features = this.options['sm-features'];
+    const savedOpts = _.get(this.serverless, 'variables.service.custom.smConfig.deploy', '');
+    const scope = savedOpts.scope || this.options['sm-scope'] || 'global';
+    const parallel = savedOpts.parallel || this.options['sm-parallel'] ? this.options['sm-parallel'] === 'true' : true;
+    const ignoreBuild = savedOpts.ignoreBuild || this.options['sm-ignore-build'] ? this.options['sm-ignore-build'] === 'true' : false;
+    let features = savedOpts.features || this.options['sm-features'];
     const srcPath = `${this.cwd}/src`;
     let featureFunctions;
     if (fs.existsSync(srcPath)) {
@@ -28,14 +28,14 @@ class deployClass {
               await buildHelper.localBuild(featureFunctions, null, cwd);
               utils.log.info('Local build successful');
             }
-            await deployHelper.localDeploy(cwd, savedOpts, parallel, features);
+            await deployHelper.localDeploy(cwd, savedOpts.options, parallel, features);
             break;
           case 'global':
             if (!ignoreBuild) {
               await buildHelper.globalBuild(featureFunctions, null, cwd);
               utils.log.info('Global build successful');
             }
-            await deployHelper.globalDeploy(cwd, savedOpts);
+            await deployHelper.globalDeploy(cwd, savedOpts.options);
             break;
           default:
             utils.log.errorMessage(messages.INVALID_SCOPE);
