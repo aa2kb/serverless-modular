@@ -8,7 +8,7 @@ const messages = require('../../messages');
 class deployClass {
   deployHandler() {
     const savedOpts = _.get(this.serverless, 'variables.service.custom.smConfig.deploy.options', '');
-    const scope = this.options['sm-scope'] || 'local';
+    const scope = this.options['sm-scope'] || 'global';
     const parallel = this.options['sm-parallel'] ? this.options['sm-parallel'] === 'true' : true;
     const ignoreBuild = this.options['sm-ignore-build'] ? this.options['sm-ignore-build'] === 'true' : false;
     let features = this.options['sm-features'];
