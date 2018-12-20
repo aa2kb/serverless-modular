@@ -1,11 +1,13 @@
+const _ = require('lodash');
 const buildHelper = require('./build.helper');
 const utils = require('../../utils');
 const messages = require('../../messages');
 
 class buildClass {
   async createFunctionsYml() {
+    const savedOpts = _.get(this.serverless, 'variables.service.custom.smConfig.build', {});
     const feature = this.options.feature;
-    const scope = this.options.scope || 'local';
+    const scope = this.options.scope || savedOpts.scope || 'local';
     const srcPath = `${this.cwd}/src`;
     const basePathDuplicate = await utils.checkIfBasePathDuplicate(srcPath);
     let featureFunctions = [];
