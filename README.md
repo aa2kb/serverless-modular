@@ -216,7 +216,9 @@ This command comes with four options
 | --scope       |    -s      |    ❎      | _string_       | local               |
 | --feature     |    -f      |    ❎      | _string_       | N/A                 |
 
-##### Add Config in serverless.yml (build Command)
+##### Saving *build* Config in serverless.yml
+
+You can also save config in serverless.yml file
 
 ```yml
 custom:
@@ -269,7 +271,9 @@ This command comes with four options
 | --sm-features     |   ❎    |    ❎      | _string_         | N/A                 |
 | --sm-ignore-build |   ❎    |    ❎      | _string_         | false               |
 
-##### Add Config in serverless.yml (deploy Command)
+##### Saving *deploy* Config in serverless.yml
+
+You can also save config in serverless.yml file
 
 ```yml
 custom:
