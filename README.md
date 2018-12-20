@@ -216,6 +216,15 @@ This command comes with four options
 | --scope       |    -s      |    ❎      | _string_       | local               |
 | --feature     |    -f      |    ❎      | _string_       | N/A                 |
 
+##### Add Config in serverless.yml (build Command)
+
+```yml
+custom:
+  smConfig:
+    build:
+      scope: local
+```
+
 #### Examples (build Command)
 
 ##### all feature build (local scope)
@@ -253,11 +262,23 @@ This command comes with four options
 
 **--sm-features**: Specify the local features you want to deploy (comma separated if multiple)
 
-| options       | shortcut|  required  |      values     |     default value   |
-| ------------- | :-----: | :--------: | --------------- | ------------------  |
-| --sm-parallel |   ❎    |    ❎      | _true, false_    | true                |
-| --sm-scope    |   ❎    |    ❎      | _local, global_  | local               |
-| --sm-features |   ❎    |    ❎      | _string_         | N/A                 |
+| options           | shortcut|  required  |      values     |     default value   |
+| ----------------- | :-----: | :--------: | --------------- | ------------------  |
+| --sm-parallel     |   ❎    |    ❎      | _true, false_    | true                |
+| --sm-scope        |   ❎    |    ❎      | _local, global_  | local               |
+| --sm-features     |   ❎    |    ❎      | _string_         | N/A                 |
+| --sm-ignore-build |   ❎    |    ❎      | _string_         | false               |
+
+##### Add Config in serverless.yml (deploy Command)
+
+```yml
+custom:
+  smConfig:
+    deploy:
+      scope: local
+      parallel: true
+      ignoreBuild: true
+```
 
 #### Examples (deploy Command)
 
