@@ -2,6 +2,7 @@ const _ = require('lodash');
 const replace = require('replace-in-file');
 const fsPath = require('fs-path');
 const utils = require('../../utils');
+const messages = require('../../messages');
 
 function adjustPackage(slsConfig) {
   const serverlessConfig = Object.assign({}, slsConfig);
@@ -72,6 +73,10 @@ function adjustCustom(slsConfig, basePath, webpackExists) {
 async function buildGlobalFunctions(featureFunctions) {
   const functions = {};
   let basePath;
+  if (!featureFunctions || featureFunctions.length <= 0) {
+    utils.log.errorMessage(messages.ERROR_NO_FEATURE);
+    throw new Error(messages.ERROR_NO_FEATURE);
+  }
   for (const f of featureFunctions) {
     const functionYml = await utils.ymlToJson(f.path);
     basePath = functionYml.basePath;
