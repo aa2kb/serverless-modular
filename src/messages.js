@@ -5,6 +5,7 @@ module.exports = {
   INVALID_ES_VERSION: 'Invalid esVersion at smConfig in serverless.yml',
   REMOVE_FLAG_USAGE: 'Invalid use of remove flag\n\n only set to "--remove true or --remove false" while using this flag',
   ERROR_REMOVING_FEATURE: 'Error Removing Feature',
+  ERROR_NO_FEATURE: 'No Features found',
   FEATURE_ALREADY_EXISTS: name => `Feature '${name}' Already exists`,
   BASE_PATH_EXISTS: name => `basePath '${name}' Already exists`,
   FUNCTION_YML_NOT_EXISTS: (filePath, feature) => `ENOENT: no such file or directory, open '${filePath}'\n\n Feature '${feature}-functions.yml' file does not exists`,
