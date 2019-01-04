@@ -1,4 +1,5 @@
 [![Gitter chat](https://badges.gitter.im/gitterHQ/gitter.png)](https://gitter.im/serverless-modular)
+[![npm version](https://badge.fury.io/js/serverless-modular.svg)](https://badge.fury.io/js/serverless-modular)
 
 ![logo.png](https://raw.githubusercontent.com/aa2kb/serverless-modular/master/logo-small.png)
 
