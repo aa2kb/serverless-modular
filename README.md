@@ -1,6 +1,6 @@
 # Serverless M
 
-[logo.png](logo-small.png)
+![logo.png](https://raw.githubusercontent.com/aa2kb/serverless-modular/master/logo-small.png)
 
 Serverless M (or Serverless Modular) **(currently in beta)** is a plugin for the [serverless framework](https://serverless.com/). This plugins helps you in managing multiple serverless projects with a single serverless.yml file. This plugin gives you a super charged CLI options that you can use to create new features, build them in a single file and deploy them all in parallel
 
