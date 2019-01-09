@@ -24,7 +24,7 @@ $ npm install serverless -g
 
 ## Getting Started
 
-To start the serverless modular project locally you can either start with es5 or es6 templates
+To start the serverless modular project locally you can either start with es5 or es6 templates or add it as a plugin
 
 ### ES6 Template install
 
@@ -56,6 +56,15 @@ $ npm init
 
 # Step 3. Install dependencies
 $ npm i serverless-modular --save-dev
+```
+
+If you dont want to use the templates above you can just add in your existing project
+
+### Adding it as plugin
+
+```yml
+plugins:
+  - serverless-modular
 ```
 
 Now you are all done to start building your serverless modular functions
@@ -150,8 +159,8 @@ $ sls m feature -n jedi
 ##### Creating a feature with different base path
 
 ```yml
-# sls m feature -n jedi -p tatooine
-$ sls m feature -n jedi -r true
+# A feature with different base path
+$ sls m feature -n jedi -p tatooine
 ```
 
 ##### Deleting a feature
