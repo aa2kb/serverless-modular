@@ -1,11 +1,13 @@
 [![Gitter chat](https://badges.gitter.im/gitterHQ/gitter.png)](https://gitter.im/serverless-modular)
 [![npm version](https://badge.fury.io/js/serverless-modular.svg)](https://badge.fury.io/js/serverless-modular)
 
-![logo.png](https://raw.githubusercontent.com/aa2kb/serverless-modular/master/logo-small.png)
+![logo.png](https://raw.githubusercontent.com/aa2kb/serverless-modular/master/images/logo-small.png)
 
 # Serverless M
 
-Serverless M (or Serverless Modular) **(currently in beta)** is a plugin for the [serverless framework](https://serverless.com/). This plugins helps you in managing multiple serverless projects with a single serverless.yml file. This plugin gives you a super charged CLI options that you can use to create new features, build them in a single file and deploy them all in parallel
+![splash.gif](https://raw.githubusercontent.com/aa2kb/serverless-modular/master/images/1.gif)
+
+Serverless M (or Serverless Modular) is a plugin for the [serverless framework](https://serverless.com/). This plugins helps you in managing multiple serverless projects with a single serverless.yml file. This plugin gives you a super charged CLI options that you can use to create new features, build them in a single file and deploy them all in parallel
 
 Currently this plugin is tested for the below stack only
 
