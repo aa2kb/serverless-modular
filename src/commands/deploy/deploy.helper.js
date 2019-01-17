@@ -121,6 +121,7 @@ function deployMultiDone(exitCode) {
 
 async function globalDeploy(cwd, deployOpts) {
   try {
+    deployOpts = deployOpts || '';
     const command = `sls deploy ${deployOpts} `;
     const options = {
       onData: deployProgress,
@@ -137,33 +138,39 @@ async function globalDeploy(cwd, deployOpts) {
 }
 
 async function localDeploy(cwd, deployOpts, parallel, features) {
-  const srcPath = `${cwd}/src`;
-  const allFeatures = utils.getFeaturePath(srcPath, true, features);
-  const slsCommands = [];
-  const options = {};
-  if (parallel) {
-    options.mode = 'parallel';
+  try {
+    deployOpts = deployOpts || '';
+    const srcPath = `${cwd}/src`;
+    const allFeatures = utils.getFeaturePath(srcPath, true, features);
+    const slsCommands = [];
+    const options = {};
+    if (parallel) {
+      options.mode = 'parallel';
+    }
+    for (const i in allFeatures) {
+      const featureName = allFeatures[i].name;
+      const featureCwd = allFeatures[i].path;
+      multiStep[featureName] = {
+        status: 'in-progress',
+        progress: 0
+      };
+      slsCommands.push({
+        command: `sls deploy ${deployOpts} `, cwd: featureCwd, onData: deployMultiProgress, onDone: deployMultiDone
+      });
+      fsPath.writeFileSync(`${featureCwd}/.sm.log`, '');
+      logsPath += `▶️  ${featureName}: ${`${featureCwd}/.sm.log`}\n`;
+    }
+    let combinedLogs = '';
+    for (const i in multiStep) {
+      const finalLog = `⬆️  ${ProgressBar.update(multiStep[i].progress / 10)} ${slsSteps[0]} (${i})`;
+      combinedLogs = `${combinedLogs}${finalLog}\n`;
+    }
+    logUpdate(combinedLogs);
+    await nrc.run(slsCommands, options);
+  } catch (err) {
+    throw (err);
   }
-  for (const i in allFeatures) {
-    const featureName = allFeatures[i].name;
-    const featureCwd = allFeatures[i].path;
-    multiStep[featureName] = {
-      status: 'in-progress',
-      progress: 0
-    };
-    slsCommands.push({
-      command: `sls deploy ${deployOpts} `, cwd: featureCwd, onData: deployMultiProgress, onDone: deployMultiDone
-    });
-    fsPath.writeFileSync(`${featureCwd}/.sm.log`, '');
-    logsPath += `▶️  ${featureName}: ${`${featureCwd}/.sm.log`}\n`;
-  }
-  let combinedLogs = '';
-  for (const i in multiStep) {
-    const finalLog = `⬆️  ${ProgressBar.update(multiStep[i].progress / 10)} ${slsSteps[0]} (${i})`;
-    combinedLogs = `${combinedLogs}${finalLog}\n`;
-  }
-  logUpdate(combinedLogs);
-  await nrc.run(slsCommands, options);
+
 }
 
 module.exports = {
