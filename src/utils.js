@@ -24,7 +24,7 @@ function isDirectory(source) {
 
 function getFeaturePath(source, onlyFeatures, filterFeatures) {
   return fs.readdirSync(source).map(name => path.join(source, name)).filter(isDirectory).map((f) => {
-    const fSplit = f.split('/');
+    const fSplit = f.split(path.sep);
     const fName = fSplit[fSplit.length - 1];
     if (onlyFeatures) {
       return {
@@ -33,7 +33,7 @@ function getFeaturePath(source, onlyFeatures, filterFeatures) {
       };
     }
     return {
-      path: `${f}/${fName}-functions.yml`,
+      path: `${f}${path.sep}${fName}-functions.yml`,
       name: fName
     };
   }).filter((feature) => { // eslint-disable-line
@@ -52,6 +52,7 @@ async function getBasePath(ymlPath) {
 
 async function checkIfBasePathIsInUse(srcPath, newBasePath) {
   const features = getFeaturePath(srcPath);
+  console.log(features);
   const promises = [];
   for (const f of features) {
     promises.push(getBasePath(f.path));
