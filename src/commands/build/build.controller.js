@@ -1,4 +1,5 @@
 const _ = require('lodash');
+const path = require('path');
 const buildHelper = require('./build.helper');
 const utils = require('../../utils');
 const messages = require('../../messages');
@@ -8,7 +9,7 @@ class buildClass {
     const savedOpts = _.get(this.serverless, 'variables.service.custom.smConfig.build', {});
     const feature = this.options.feature;
     const scope = this.options.scope || savedOpts.scope || 'local';
-    const srcPath = `${this.cwd}/src`;
+    const srcPath = `${this.cwd}${path.sep}src`;
     const basePathDuplicate = await utils.checkIfBasePathDuplicate(srcPath);
     let featureFunctions = [];
     if (scope && (scope !== 'local' && scope !== 'global')) {
@@ -21,7 +22,7 @@ class buildClass {
     }
     if (feature) {
       featureFunctions = [{
-        path: `${srcPath}/${feature}/${feature}-functions.yml`,
+        path: `${srcPath}${path.sep}${feature}${path.sep}${feature}-functions.yml`,
         name: feature
       }];
     } else {

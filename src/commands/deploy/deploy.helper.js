@@ -1,6 +1,7 @@
 
 const nrc = require('node-run-cmd');
 const clui = require('clui');
+const path = require('path');
 const _ = require('lodash');
 const logUpdate = require('log-update');
 const fs = require('fs');
@@ -78,7 +79,7 @@ function getCombinedLogMain() {
 function deployProgress(data) {
   const stdOut = data;
   const cwd = this.cwd;
-  fs.appendFileSync(`${cwd}/.sm.log`, data, { flag: 'a+' });
+  fs.appendFileSync(`${cwd}${path.sep}.sm.log`, data, { flag: 'a+' });
   for (const i in slsSteps) {
     if (_.includes(stdOut, slsSteps[i])) {
       onStep = parseInt(i, 10);
@@ -90,9 +91,9 @@ function deployProgress(data) {
 
 function deployMultiProgress(data) {
   const featurePath = this.cwd;
-  const featureName = featurePath.split('/')[featurePath.split('/').length - 1];
+  const featureName = featurePath.split(`${path.sep}`)[featurePath.split(`${path.sep}`).length - 1];
   const stdOut = data;
-  fs.appendFileSync(`${featurePath}/.sm.log`, data, { flag: 'a+' });
+  fs.appendFileSync(`${featurePath}${path.sep}.sm.log`, data, { flag: 'a+' });
   for (const i in slsSteps) {
     if (_.includes(stdOut, slsSteps[i])) {
       if (!multiStep[featureName].status.includes('done-')) {
@@ -115,7 +116,7 @@ function deployDone(exitCode) {
 
 function deployMultiDone(exitCode) {
   const featurePath = this.cwd;
-  const featureName = featurePath.split('/')[featurePath.split('/').length - 1];
+  const featureName = featurePath.split(`${path.sep}`)[featurePath.split(`${path.sep}`).length - 1];
   logUpdate(getCombinedLog(featureName, exitCode));
 }
 
@@ -128,8 +129,8 @@ async function globalDeploy(cwd, deployOpts) {
       onDone: deployDone,
       cwd
     };
-    mainLogsPath = `▶️  Logs: ${`${cwd}/.sm.log`}`;
-    fsPath.writeFileSync(`${cwd}/.sm.log`, '');
+    mainLogsPath = `▶️  Logs: ${`${cwd}${path.sep}.sm.log`}`;
+    fsPath.writeFileSync(`${cwd}${path.sep}.sm.log`, '');
     logUpdate(`⬆️  ${ProgressBar.update(0)} ${slsSteps[0]}\n${mainLogsPath}`);
     await nrc.run(command, options);
   } catch (err) {
@@ -140,7 +141,7 @@ async function globalDeploy(cwd, deployOpts) {
 async function localDeploy(cwd, deployOpts, parallel, features) {
   try {
     deployOpts = deployOpts || '';
-    const srcPath = `${cwd}/src`;
+    const srcPath = `${cwd}${path.sep}src`;
     const allFeatures = utils.getFeaturePath(srcPath, true, features);
     const slsCommands = [];
     const options = {};
@@ -157,8 +158,8 @@ async function localDeploy(cwd, deployOpts, parallel, features) {
       slsCommands.push({
         command: `sls deploy ${deployOpts} `, cwd: featureCwd, onData: deployMultiProgress, onDone: deployMultiDone
       });
-      fsPath.writeFileSync(`${featureCwd}/.sm.log`, '');
-      logsPath += `▶️  ${featureName}: ${`${featureCwd}/.sm.log`}\n`;
+      fsPath.writeFileSync(`${featureCwd}${path.sep}.sm.log`, '');
+      logsPath += `▶️  ${featureName}: ${`${featureCwd}${path.sep}.sm.log`}\n`;
     }
     let combinedLogs = '';
     for (const i in multiStep) {
