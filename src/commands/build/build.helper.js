@@ -1,4 +1,5 @@
 const _ = require('lodash');
+const path = require('path');
 const replace = require('replace-in-file');
 const fsPath = require('fs-path');
 const utils = require('../../utils');
@@ -82,10 +83,10 @@ async function buildGlobalFunctions(featureFunctions) {
     basePath = functionYml.basePath;
     for (const i in functionYml.functions) {
       const currentFunction = functionYml.functions[i];
-      currentFunction.handler = `src/${f.name}/${currentFunction.handler}`;
+      currentFunction.handler = `src${path.sep}${f.name}/${currentFunction.handler}`;
       for (const j in currentFunction.events) {
         const currentPath = currentFunction.events[j].http.path;
-        currentFunction.events[j].http.path = `${functionYml.basePath}/${currentPath}`;
+        currentFunction.events[j].http.path = `${functionYml.basePath}${path.sep}${currentPath}`;
       }
       const functionName = `${f.name}-${i}`;
       functions[functionName] = currentFunction;
@@ -99,7 +100,7 @@ async function buildGlobalFunctions(featureFunctions) {
 
 async function buildLocalSLSConfig(serverlessConfig, basePath, cwd, feature, functionYml) {
   const localFeatureFunctions = {};
-  const localFeatureServerlessYmlPath = `${cwd}/src/${feature.name}/serverless.yml`;
+  const localFeatureServerlessYmlPath = `${cwd}${path.sep}src${path.sep}${feature.name}${path.sep}serverless.yml`;
   const webpackExists = _.get(serverlessConfig, 'plugins').includes('serverless-webpack');
   for (const i in functionYml.functions) {
     const currentFunction = functionYml.functions[i];
@@ -121,13 +122,13 @@ async function buildLocalSLSConfig(serverlessConfig, basePath, cwd, feature, fun
 }
 
 async function globalBuild(featureFunctions, feature, cwd) {
-  const mainFunctionsPath = `${cwd}/sm.functions.yml`;
+  const mainFunctionsPath = `${cwd}${path.sep}sm.functions.yml`;
   const mainFunctions = await buildGlobalFunctions(featureFunctions);
   fsPath.writeFileSync(mainFunctionsPath, utils.jsontoYml(mainFunctions.functions));
 }
 
 async function localBuild(featureFunctions, feature, cwd) {
-  const mainServerlessYmlPath = `${cwd}/serverless.yml`;
+  const mainServerlessYmlPath = `${cwd}${path.sep}serverless.yml`;
   const serverlessConfig = await utils.ymlToJson(mainServerlessYmlPath);
   const baseName = serverlessConfig.service.toString();
   for (const f of featureFunctions) {

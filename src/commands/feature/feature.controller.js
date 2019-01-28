@@ -1,5 +1,6 @@
 const fsPath = require('fs-path');
 const format = require('string-template');
+const path = require('path');
 const fs = require('fs');
 const rimraf = require('rimraf');
 const nrc = require('node-run-cmd');
@@ -13,7 +14,7 @@ class featureClass {
       return new Promise(async (resolve, reject) => {
         try {
           const esVersion = _.get(this.serverless, 'variables.service.custom.smConfig.esVersion', 'es5');
-          const srcPath = `${this.cwd}/src`;
+          const srcPath = `${this.cwd}${path.sep}src`;
           const formatData = {
             feature: this.options.name,
             featureInitCap: _.startCase(this.options.name),
@@ -24,7 +25,7 @@ class featureClass {
             throw new Error(messages.INVALID_BASE_PATH(this.options.name));
           }
           const basePathExists = fs.existsSync(srcPath) ? await utils.checkIfBasePathIsInUse(srcPath, formatData.basePath) : false;
-          if (fs.existsSync(`${this.cwd}/src/${this.options.name}`)) {
+          if (fs.existsSync(`${this.cwd}${path.sep}src${path.sep}${this.options.name}`)) {
             utils.log.errorMessage(messages.FEATURE_ALREADY_EXISTS(this.options.name));
             throw new Error(messages.FEATURE_ALREADY_EXISTS(this.options.name));
           }
@@ -34,17 +35,17 @@ class featureClass {
           }
           for (const i in this.featureSet) {
             const file = `${this.options.name}-${this.featureSet[i].name}.${this.featureSet[i].extension}`.toLowerCase();
-            const path = `${this.cwd}/src/${this.options.name}/${file}`.toLowerCase();
+            const filePath = `${this.cwd}${path.sep}src${path.sep}${this.options.name}${path.sep}${file}`.toLowerCase();
             let template;
             if (this.featureSet[i].name === 'controller' || this.featureSet[i].name === 'handler' || this.featureSet[i].name === 'model') {
               template = this.featureSet[i].template[esVersion];
             } else {
               template = this.featureSet[i].template;
             }
-            if (fs.existsSync(path)) {
+            if (fs.existsSync(filePath)) {
               utils.log.warn(`already exists ${file}`);
             } else {
-              fsPath.writeFileSync(path, format(template, formatData));
+              fsPath.writeFileSync(filePath, format(template, formatData));
               utils.log.info(`generated ${file}`);
             }
           }
@@ -59,8 +60,8 @@ class featureClass {
       return new Promise(async (resolve, reject) => {
         try {
           const command = 'sls remove';
-          const featurePath = `${this.cwd}/src/${this.options.name}`.toLowerCase();
-          const slsFeaturePath = `${this.cwd}/src/${this.options.name}/serverless.yml`.toLowerCase();
+          const featurePath = `${this.cwd}${path.sep}src${path.sep}${this.options.name}`.toLowerCase();
+          const slsFeaturePath = `${this.cwd}${path.sep}src${path.sep}${this.options.name}${path.sep}serverless.yml`.toLowerCase();
           if (!fs.existsSync(slsFeaturePath)) {
             utils.log.errorMessage(messages.FEATURE_FILE_NOT_EXISTS(slsFeaturePath));
             throw new Error(messages.FEATURE_FILE_NOT_EXISTS(slsFeaturePath));

@@ -1,4 +1,5 @@
 const fsPath = require('fs-path');
+const path = require('path');
 const fs = require('fs');
 const format = require('string-template');
 const _ = require('lodash');
@@ -16,8 +17,8 @@ class functionClass {
         HTTPMethod = HTTPMethod.toUpperCase();
         let HTTPPath = this.options.path || name;
         HTTPPath = HTTPPath.toLowerCase();
-        const functionFilePath = `${this.cwd}/src/${feature}/${feature}-functions.yml`;
-        const handlerFilePath = `${this.cwd}/src/${feature}/${feature}-handler.js`;
+        const functionFilePath = `${this.cwd}${path.sep}src${path.sep}${feature}${path.sep}${feature}-functions.yml`;
+        const handlerFilePath = `${this.cwd}${path.sep}src${path.sep}${feature}${path.sep}${feature}-handler.js`;
         if (!fs.existsSync(functionFilePath)) {
           utils.log.errorMessage(messages.FUNCTION_YML_NOT_EXISTS(functionFilePath, feature));
           throw new Error(messages.FUNCTION_YML_NOT_EXISTS(functionFilePath, feature));

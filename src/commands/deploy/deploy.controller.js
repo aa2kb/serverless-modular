@@ -1,5 +1,6 @@
 const _ = require('lodash');
 const fs = require('fs');
+const path = require('path');
 const deployHelper = require('./deploy.helper');
 const buildHelper = require('./../build/build.helper');
 const utils = require('../../utils');
@@ -18,7 +19,7 @@ class deployClass {
       ignoreBuild = savedOpts.ignoreBuild;
     }
     let features = savedOpts.features || this.options['sm-features'] || null;
-    const srcPath = `${this.cwd}/src`;
+    const srcPath = `${this.cwd}${path.sep}src`;
     let featureFunctions;
     if (fs.existsSync(srcPath)) {
       featureFunctions = utils.getFeaturePath(srcPath);
