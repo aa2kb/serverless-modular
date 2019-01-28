@@ -35,17 +35,17 @@ class featureClass {
           }
           for (const i in this.featureSet) {
             const file = `${this.options.name}-${this.featureSet[i].name}.${this.featureSet[i].extension}`.toLowerCase();
-            const path = `${this.cwd}${path.sep}src${path.sep}${this.options.name}${path.sep}${file}`.toLowerCase();
+            const filePath = `${this.cwd}${path.sep}src${path.sep}${this.options.name}${path.sep}${file}`.toLowerCase();
             let template;
             if (this.featureSet[i].name === 'controller' || this.featureSet[i].name === 'handler' || this.featureSet[i].name === 'model') {
               template = this.featureSet[i].template[esVersion];
             } else {
               template = this.featureSet[i].template;
             }
-            if (fs.existsSync(path)) {
+            if (fs.existsSync(filePath)) {
               utils.log.warn(`already exists ${file}`);
             } else {
-              fsPath.writeFileSync(path, format(template, formatData));
+              fsPath.writeFileSync(filePath, format(template, formatData));
               utils.log.info(`generated ${file}`);
             }
           }
