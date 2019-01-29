@@ -210,7 +210,7 @@ $ sls m function -n cloak -f jedi
 
 ```yml
 # Creating a cloak function for jedi feature with custom path and HTTP method
-$ sls m function -n cloak -f jedi -p powers -n POST
+$ sls m function -n cloak -f jedi -p powers -m POST
 ```
 
 ___
