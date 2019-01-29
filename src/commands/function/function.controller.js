@@ -12,7 +12,7 @@ class functionClass {
       try {
         const esVersion = _.get(this.serverless, 'variables.service.custom.smConfig.esVersion', 'es5');
         const feature = this.options.feature;
-        const name = this.options.name.toLowerCase();
+        const name = this.options.name;
         let HTTPMethod = this.options.method || 'get';
         HTTPMethod = HTTPMethod.toLowerCase();
         let HTTPPath = this.options.path || name;
