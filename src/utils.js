@@ -8,7 +8,10 @@ const messages = require('./messages');
 
 async function ymlToJson(filename) {
   try {
-    return jsYaml.safeLoad(await fs.readFileAsync(filename, 'utf8').then(data => data));
+    if (fs.existsSync(filename)) {
+      return jsYaml.safeLoad(await fs.readFileAsync(filename, 'utf8').then(data => data));
+    }
+    return null;
   } catch (err) {
     throw (err);
   }
@@ -44,7 +47,7 @@ function getFeaturePath(source, onlyFeatures, filterFeatures) {
 async function getBasePath(ymlPath) {
   try {
     const functionYml = await ymlToJson(ymlPath);
-    return functionYml.basePath;
+    return functionYml ? functionYml.basePath : null;
   } catch (err) {
     throw (err);
   }
@@ -70,7 +73,10 @@ async function checkIfBasePathDuplicate(srcPath) {
   const features = getFeaturePath(srcPath);
   const promises = [];
   for (const f of features) {
-    promises.push(getBasePath(f.path));
+    const baseBath = getBasePath(f.path);
+    if (baseBath) {
+      promises.push(baseBath);
+    }
   }
   const allBasePaths = await Promise.all(promises);
   return _.uniq(allBasePaths).length !== allBasePaths.length;
