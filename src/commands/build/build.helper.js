@@ -2,6 +2,7 @@ const _ = require('lodash');
 const path = require('path');
 const replace = require('replace-in-file');
 const fsPath = require('fs-path');
+const fs = require('fs');
 const utils = require('../../utils');
 const messages = require('../../messages');
 
@@ -79,17 +80,19 @@ async function buildGlobalFunctions(featureFunctions) {
     throw new Error(messages.ERROR_NO_FEATURE);
   }
   for (const f of featureFunctions) {
-    const functionYml = await utils.ymlToJson(f.path);
-    basePath = functionYml.basePath;
-    for (const i in functionYml.functions) {
-      const currentFunction = functionYml.functions[i];
-      currentFunction.handler = `src/${f.name}/${currentFunction.handler}`;
-      for (const j in currentFunction.events) {
-        const currentPath = currentFunction.events[j].http.path;
-        currentFunction.events[j].http.path = `${functionYml.basePath}/${currentPath}`;
+    if (fs.existsSync(f.path)) {
+      const functionYml = await utils.ymlToJson(f.path);
+      basePath = functionYml.basePath;
+      for (const i in functionYml.functions) {
+        const currentFunction = functionYml.functions[i];
+        currentFunction.handler = `src/${f.name}/${currentFunction.handler}`;
+        for (const j in currentFunction.events) {
+          const currentPath = currentFunction.events[j].http.path;
+          currentFunction.events[j].http.path = `${functionYml.basePath}/${currentPath}`;
+        }
+        const functionName = `${f.name}-${i}`;
+        functions[functionName] = currentFunction;
       }
-      const functionName = `${f.name}-${i}`;
-      functions[functionName] = currentFunction;
     }
   }
   return {
