@@ -1,5 +1,3 @@
-class {feature}Model {
+export default class {feature}Model {
 
 }
-
-module.exports = {feature}Model;

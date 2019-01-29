@@ -55,7 +55,6 @@ async function getBasePath(ymlPath) {
 
 async function checkIfBasePathIsInUse(srcPath, newBasePath) {
   const features = getFeaturePath(srcPath);
-  console.log(features);
   const promises = [];
   for (const f of features) {
     promises.push(getBasePath(f.path));
