@@ -14,7 +14,7 @@ class functionClass {
         const feature = this.options.feature;
         const name = this.options.name.toLowerCase();
         let HTTPMethod = this.options.method || 'get';
-        HTTPMethod = HTTPMethod.toUpperCase();
+        HTTPMethod = HTTPMethod.toLowerCase();
         let HTTPPath = this.options.path || name;
         HTTPPath = HTTPPath.toLowerCase();
         const functionFilePath = `${this.cwd}${path.sep}src${path.sep}${feature}${path.sep}${feature}-functions.yml`;
