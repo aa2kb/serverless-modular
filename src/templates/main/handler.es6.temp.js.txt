@@ -1,4 +1,4 @@
-import {featureInitCap} from './{feature}-controller.js';
+import {featureInitCap} from './{feature}-controller';
 const {feature}Ctrl = new {featureInitCap}();
 
 export async function test(event, context, callback) {

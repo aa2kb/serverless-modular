@@ -1,4 +1,4 @@
-import {feature}Model from './{feature}-model.js';
+import {feature}Model from './{feature}-model';
 
 export default class {feature}Controller {
   sendTestResponse() {
