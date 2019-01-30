@@ -4,6 +4,6 @@ functions:
     handler: {feature}-handler.test
     events:
       - http:
-         method: GET
+         method: get
          path: ''
          cors: true
