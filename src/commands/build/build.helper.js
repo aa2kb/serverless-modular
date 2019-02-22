@@ -26,7 +26,7 @@ function adjustPackage(slsConfig) {
 function adjustPlugin(slsConfig) {
   const serverlessConfig = Object.assign({}, slsConfig);
   const slsDomainManager = 'serverless-domain-manager';
-  const addDomainManager = _.get(serverlessConfig, 'custom.smConfig.build.add-domain-manager', false);
+  const addDomainManager = _.get(serverlessConfig, 'custom.smConfig.build.addDomainManager', false);
   if (serverlessConfig.plugins) {
     if (!serverlessConfig.plugins.includes(slsDomainManager) && addDomainManager) {
       serverlessConfig.plugins.push(slsDomainManager);
@@ -40,7 +40,7 @@ function adjustPlugin(slsConfig) {
 
 function adjustCustom(slsConfig, basePath, webpackExists) {
   const serverlessConfig = Object.assign({}, slsConfig);
-  const addDomainManager = _.get(serverlessConfig, 'custom.smConfig.build.add-domain-manager', false);
+  const addDomainManager = _.get(serverlessConfig, 'custom.smConfig.build.addDomainManager', false);
   if (serverlessConfig.custom && addDomainManager) {
     if (serverlessConfig.custom.customDomain) {
       serverlessConfig.custom = {
