@@ -1,6 +1,6 @@
 {
   "name": "serverless-modular",
-  "version": "0.0.46",
+  "version": "0.0.47",
   "description": "serverless framework plugin for feature management",
   "homepage": "https://github.com/aa2kb/serverless-modular#readme",
   "bugs": {
