@@ -136,9 +136,11 @@ async function localBuild(featureFunctions, feature, cwd) {
   const baseName = serverlessConfig.service.toString();
   for (const f of featureFunctions) {
     const functionYml = await utils.ymlToJson(f.path);
-    const basePath = functionYml.basePath;
-    serverlessConfig.service = `${baseName}-${f.name}`;
-    await buildLocalSLSConfig(serverlessConfig, basePath, cwd, f, functionYml);
+    if (functionYml) {
+      const basePath = functionYml.basePath;
+      serverlessConfig.service = `${baseName}-${f.name}`;
+      await buildLocalSLSConfig(serverlessConfig, basePath, cwd, f, functionYml);
+    }
   }
 }
 
