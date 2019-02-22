@@ -73,7 +73,7 @@ function getCombinedLogMain() {
   } else {
     finalLog = `⬆️  ${finalLog}`;
   }
-  return `${finalLog}\n${mainLogsPath}`;
+  return `${finalLog}\n`;
 }
 
 function deployProgress(data) {
