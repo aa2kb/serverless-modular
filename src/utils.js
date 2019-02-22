@@ -41,7 +41,7 @@ function getFeaturePath(source, onlyFeatures, filterFeatures) {
     };
   }).filter((feature) => { // eslint-disable-line
     return filterFeatures ? filterFeatures.includes(feature.name) : true;
-  });
+  }).filter(f => fs.existsSync(f.path));
 }
 
 async function getBasePath(ymlPath) {
