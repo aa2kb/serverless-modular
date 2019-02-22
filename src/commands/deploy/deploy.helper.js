@@ -26,7 +26,7 @@ const ProgressBar = new Progress(20);
 let onStep = 0;
 let onStatus;
 const multiStep = {};
-let logsPath = '';
+// let logsPath = '';
 // let mainLogsPath = '';
 
 function getCombinedLog(completedFeatureName, exitCode) {
@@ -55,7 +55,7 @@ function getCombinedLog(completedFeatureName, exitCode) {
     }
     combinedLogs = `${combinedLogs}${finalLog}\n`;
   }
-  return combinedLogs + logsPath;
+  return combinedLogs;
 }
 
 function getCombinedLogMain() {
@@ -159,7 +159,7 @@ async function localDeploy(cwd, deployOpts, parallel, features) {
         command: `sls deploy ${deployOpts} `, cwd: featureCwd, onData: deployMultiProgress, onDone: deployMultiDone
       });
       fsPath.writeFileSync(`${featureCwd}${path.sep}.sm.log`, '');
-      logsPath += `▶️  ${featureName}: ${`${featureCwd}${path.sep}.sm.log`}\n`;
+      // logsPath += `▶️  ${featureName}: ${`${featureCwd}${path.sep}.sm.log`}\n`;
     }
     let combinedLogs = '';
     for (const i in multiStep) {
@@ -171,7 +171,6 @@ async function localDeploy(cwd, deployOpts, parallel, features) {
   } catch (err) {
     throw (err);
   }
-
 }
 
 module.exports = {
