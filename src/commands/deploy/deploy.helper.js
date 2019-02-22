@@ -27,7 +27,7 @@ let onStep = 0;
 let onStatus;
 const multiStep = {};
 let logsPath = '';
-let mainLogsPath = '';
+// let mainLogsPath = '';
 
 function getCombinedLog(completedFeatureName, exitCode) {
   let combinedLogs = '';
@@ -129,9 +129,9 @@ async function globalDeploy(cwd, deployOpts) {
       onDone: deployDone,
       cwd
     };
-    mainLogsPath = `▶️  Logs: ${`${cwd}${path.sep}.sm.log`}`;
+    // mainLogsPath = `▶️  Logs: ${`${cwd}${path.sep}.sm.log`}`;
     fsPath.writeFileSync(`${cwd}${path.sep}.sm.log`, '');
-    logUpdate(`⬆️  ${ProgressBar.update(0)} ${slsSteps[0]}\n${mainLogsPath}`);
+    logUpdate(`⬆️  ${ProgressBar.update(0)} ${slsSteps[0]}\n`);
     await nrc.run(command, options);
   } catch (err) {
     throw (err);
