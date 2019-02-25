@@ -87,8 +87,9 @@ async function buildGlobalFunctions(featureFunctions) {
         const currentFunction = functionYml.functions[i];
         currentFunction.handler = `src/${f.name}/${currentFunction.handler}`;
         for (const j in currentFunction.events) {
-          if (currentFunction.events[j].http && currentFunction.events[j].http.path) {
-            const currentPath = currentFunction.events[j].http.path;
+          const currentPath = _.get(currentFunction.events[j], 'http.path');
+          console.log(currentPath);
+          if (currentPath || currentPath === '') {
             currentFunction.events[j].http.path = `${functionYml.basePath}/${currentPath}`;
           }
         }
