@@ -21,6 +21,8 @@ const slsSteps = [
   'Service Information',
   'api keys:'
 ];
+const featuresCompleted = {};
+let exitCodeCombined = 0;
 const Progress = clui.Progress;
 const ProgressBar = new Progress(20);
 let onStep = 0;
@@ -117,6 +119,8 @@ function deployDone(exitCode) {
 function deployMultiDone(exitCode) {
   const featurePath = this.cwd;
   const featureName = featurePath.split(`${path.sep}`)[featurePath.split(`${path.sep}`).length - 1];
+  featuresCompleted[featureName] = parseInt(exitCode, 10) === 0 ? 'Success' : 'Error';
+  exitCodeCombined += parseInt(exitCode, 10);
   logUpdate(getCombinedLog(featureName, exitCode));
 }
 
@@ -168,6 +172,10 @@ async function localDeploy(cwd, deployOpts, parallel, features) {
     }
     logUpdate(combinedLogs);
     await nrc.run(slsCommands, options);
+    logUpdate(featuresCompleted);
+    if (exitCodeCombined > 0) {
+      throw new Error('Deployment failed');
+    }
   } catch (err) {
     throw (err);
   }
