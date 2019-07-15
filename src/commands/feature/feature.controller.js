@@ -59,7 +59,7 @@ class featureClass {
     const removeFeature = function () {
       return new Promise(async (resolve, reject) => {
         try {
-          const command = 'sls remove';
+          const command = this.options.stage ? `sls remove --stage ${this.options.stage}` :'sls remove';
           const featurePath = `${this.cwd}${path.sep}src${path.sep}${this.options.name}`.toLowerCase();
           const slsFeaturePath = `${this.cwd}${path.sep}src${path.sep}${this.options.name}${path.sep}serverless.yml`.toLowerCase();
           if (!fs.existsSync(slsFeaturePath)) {
