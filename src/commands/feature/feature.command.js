@@ -10,6 +10,7 @@ const featureCommands = {
         + '(e.g. "--name \'users\'" or "-m \'users\'")',
       required: true,
       shortcut: 'n',
+      type: 'string',
     },
     remove: {
       usage:
@@ -17,6 +18,7 @@ const featureCommands = {
         + '(e.g. "--remove \'true\'" or "-r \'true\'")',
       required: false,
       shortcut: 'r',
+      type: 'string',
     },
     basePath: {
       usage:
@@ -24,6 +26,7 @@ const featureCommands = {
         + '(e.g. "--basepath \'users\'" or "-b \'users\'")',
       required: false,
       shortcut: 'p',
+      type: 'string',
     }
   }
 };
