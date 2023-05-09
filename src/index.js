@@ -17,6 +17,7 @@ class ServerlessPlugin {
         build: commands.smBuild.command,
         init: commands.smInit.command,
         deploy: commands.smDeploy.command,
+        remove: commands.smRemove.command,
       }
     };
     this.commands = {
@@ -30,6 +31,7 @@ class ServerlessPlugin {
       'modular:build:createFunctionsYml': commands.smBuild.controller.bind(this),
       'modular:init:initHandler': commands.smInit.controller.bind(this),
       'modular:deploy:deployHandler': commands.smDeploy.controller.bind(this),
+      'modular:remove:removeHandler': commands.smRemove.controller.bind(this),
 
       // alias commands
       'm:feature:featureHandler': commands.smFeature.controller.bind(this),
@@ -37,6 +39,7 @@ class ServerlessPlugin {
       'm:build:createFunctionsYml': commands.smBuild.controller.bind(this),
       'm:init:initHandler': commands.smInit.controller.bind(this),
       'm:deploy:deployHandler': commands.smDeploy.controller.bind(this),
+      'm:remove:removeHandler': commands.smRemove.controller.bind(this),
 
     };
   }

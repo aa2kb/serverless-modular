@@ -337,6 +337,75 @@ $ sls m deploy --sm-features jedi,sith,dark_side
 $ sls m deploy  --sm-features jedi,sith,dark_side --sm-parallel false
 ```
 
+### remove command
+
+The remove command helps in removing serverless projects from AWS (it uses `sls remove` command)
+
+#### options (remove Command)
+
+This command comes with four options
+
+**--sm-parallel**: Specify if you want to remove parallel (will only run in parallel when doing multiple removals)
+
+**--sm-scope**: Specify if you want to remove local features or global
+
+**--sm-features**: Specify the local features you want to remove (comma separated if multiple)
+
+| options           | shortcut|  required  |      values     |     default value   |
+| ----------------- | :-----: | :--------: | --------------- | ------------------  |
+| --sm-parallel     |   ❎    |    ❎      | _true, false_    | true                |
+| --sm-scope        |   ❎    |    ❎      | _local, global_  | local               |
+| --sm-features     |   ❎    |    ❎      | _string_         | N/A                 |
+
+##### Saving *remove* Config in serverless.yml
+
+You can also save config in serverless.yml file
+
+```yml
+custom:
+  smConfig:
+    remove:
+      scope: local
+      parallel: true
+```
+
+#### Examples (remove Command)
+
+##### Remove all features locally
+
+```yml
+# remove all local features
+$ sls m remove
+```
+
+##### Remove all features globally
+
+```yml
+# remove all global features
+$ sls m remove --sm-scope global
+```
+
+##### Remove single feature
+
+```yml
+# remove all local features
+$ sls m remove --sm-features jedi
+```
+
+##### Remove Multiple features
+
+```yml
+# remove all local features
+$ sls m remove --sm-features jedi,sith,dark_side
+```
+
+##### Remove Multiple features in sequence
+
+```yml
+# remove all local features in sequence
+$ sls m remove  --sm-features jedi,sith,dark_side --sm-parallel false
+```
+
 ___
 
 ## Authors
