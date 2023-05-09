@@ -10,6 +10,7 @@ const functionCommands = {
         + '(e.g. "--name \'login\'" or "-n \'login\'")',
       required: true,
       shortcut: 'n',
+      type: 'string',
     },
     feature: {
       usage:
@@ -17,6 +18,7 @@ const functionCommands = {
         + '(e.g. "--feature \'users\'" or "-f \'users\'")',
       required: true,
       shortcut: 'f',
+      type: 'string',
     },
     path: {
       usage:
@@ -24,6 +26,7 @@ const functionCommands = {
         + '(e.g. "--path \'users\'" or "-p \'users\'")',
       required: false,
       shortcut: 'p',
+      type: 'string',
     },
     method: {
       usage:
@@ -31,6 +34,7 @@ const functionCommands = {
         + '(e.g. "--method \'GET\'" or "-m \'GET\'")',
       required: false,
       shortcut: 'm',
+      type: 'string',
     }
   }
 };
